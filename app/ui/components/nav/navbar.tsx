@@ -19,7 +19,7 @@ export default function Navbar() {
   return (
     <nav className="flex flex-col items-center justify-start min-h-full w-60 p-8 gap-y-4">
       <Link href="/dashboard" className="text-3xl font-bold">
-        Pay<span className="text-primary">Clear</span>
+        Clear<span className="text-primary">Pay</span>
       </Link>
       {routes.map((route) => (
         <Navlink
