@@ -1,15 +1,19 @@
 import { db } from "@/app/db/db";
+import ContactsTable from "./contacts-table";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default async function Page() {
-  const users = await db.query.contacts.findMany();
+  const contacts = await db.query.contacts.findMany();
   return (
-    <div className="flex flex-col pt-10">
-      <h1 className="text-2xl font-bold">Contacts</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.firstName}</li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold">Contacts</h1>
+        <Link href="/contacts/create">
+          <Button className="hover:cursor-pointer">Add Contact</Button>
+        </Link>
+      </div>
+      <ContactsTable contacts={contacts} />
+    </>
   );
 }

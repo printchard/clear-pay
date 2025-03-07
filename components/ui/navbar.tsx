@@ -1,9 +1,9 @@
 "use client";
 
-import ContactsIcon from "../../icons/contacts-icon";
-import DashboardIcon from "../../icons/dashboard-icon";
-import Navlink from "@/app/ui/components/nav/navlink";
-import MoneyIcon from "../../icons/money-icon";
+import ContactsIcon from "@/components/icons/contacts-icon";
+import DashboardIcon from "@/components/icons/dashboard-icon";
+import Navlink from "@/components/ui/navlink";
+import MoneyIcon from "@/components/icons/money-icon";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -17,7 +17,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="flex flex-col items-center justify-start min-h-full w-60 p-8 gap-y-4">
+    <nav className="flex flex-col items-center justify-start min-h-full w-60 p-7 gap-y-4 shrink-0">
       <Link href="/dashboard" className="text-3xl font-bold">
         Clear<span className="text-primary">Pay</span>
       </Link>
