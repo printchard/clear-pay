@@ -13,8 +13,9 @@ export const users = pgTable("users", {
   name: text().notNull(),
   email: text().notNull().unique(),
   password: text().notNull(),
-  created_at: timestamp().defaultNow(),
+  created_at: timestamp().notNull().defaultNow(),
   updated_at: timestamp()
+    .notNull()
     .defaultNow()
     .$onUpdate(() => sql`current_timestamp`),
 });
@@ -30,8 +31,9 @@ export const debts = pgTable("debts", {
   amount: integer().notNull(),
   status: statusEnum().default("pending"),
   contactId: uuid().notNull(),
-  created_at: timestamp().defaultNow(),
+  created_at: timestamp().notNull().defaultNow(),
   updated_at: timestamp()
+    .notNull()
     .defaultNow()
     .$onUpdate(() => sql`current_timestamp`),
 });
@@ -48,8 +50,9 @@ export const contacts = pgTable("contacts", {
   firstName: text().notNull(),
   lastName: text(),
   userId: uuid(),
-  created_at: timestamp().defaultNow(),
+  created_at: timestamp().notNull().defaultNow(),
   updated_at: timestamp()
+    .notNull()
     .defaultNow()
     .$onUpdate(() => sql`current_timestamp`),
 });
@@ -72,8 +75,9 @@ export const paymentInfos = pgTable("payment_infos", {
   type: paymentInfoTypeEnum().notNull(),
   data: text(),
   contactId: uuid(),
-  created_at: timestamp().defaultNow(),
+  created_at: timestamp().notNull().defaultNow(),
   updated_at: timestamp()
+    .notNull()
     .defaultNow()
     .$onUpdate(() => sql`current_timestamp`),
 });
