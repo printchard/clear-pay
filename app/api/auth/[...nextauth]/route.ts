@@ -19,10 +19,16 @@ const handler = NextAuth({
           .from(users)
           .where(eq(users.email, credentials.email))
           .limit(1);
+        if (!user) {
+          console.error("No user found");
+          return null;
+        }
 
         console.log(user);
-        if (user && bcrypt.compareSync(credentials.email, user[0].password))
+        if (await bcrypt.compare(credentials.password, user[0].password))
           return user[0];
+
+        console.error("Invalid credentials");
 
         return null;
       },

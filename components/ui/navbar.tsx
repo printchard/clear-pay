@@ -1,19 +1,23 @@
 "use client";
 
-import ContactsIcon from "@/components/icons/contacts-icon";
-import DashboardIcon from "@/components/icons/dashboard-icon";
 import Navlink from "@/components/ui/navlink";
-import MoneyIcon from "@/components/icons/money-icon";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import {
+  LogOut,
+  LayoutDashboard,
+  Landmark,
+  CircleUserRound,
+} from "lucide-react";
+import { signOut } from "next-auth/react";
 
 export default function Navbar() {
   const pathname = usePathname();
 
   const routes = [
-    { name: "Dashboard", href: "/dashboard", icon: <DashboardIcon /> },
-    { name: "Debts", href: "/debts", icon: <MoneyIcon /> },
-    { name: "Contacts", href: "/contacts", icon: <ContactsIcon /> },
+    { name: "Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
+    { name: "Debts", href: "/debts", icon: <Landmark /> },
+    { name: "Contacts", href: "/contacts", icon: <CircleUserRound /> },
   ];
 
   return (
@@ -30,6 +34,12 @@ export default function Navbar() {
           isActive={pathname === route.href}
         />
       ))}
+      <Navlink
+        name="Sign Out"
+        icon={<LogOut />}
+        className="mt-auto"
+        onClick={signOut}
+      ></Navlink>
     </nav>
   );
 }
