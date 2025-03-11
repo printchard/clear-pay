@@ -11,10 +11,10 @@ export default function ConctactsForm({
 }) {
   return (
     <form action={action} className="flex flex-col gap-y-4">
-      <Label htmlFor="email">First Name</Label>
+      <Label htmlFor="firstName">First Name</Label>
       <Input type="text" name="firstName" placeholder="First Name" />
-      <Label htmlFor="email">Email</Label>
-      <Input type="email" name="email" placeholder="Email" />
+      <Label htmlFor="lastName">Last Name</Label>
+      <Input type="text" name="lastName" placeholder="Last Name" />
       <Button>Submit</Button>
     </form>
   );
