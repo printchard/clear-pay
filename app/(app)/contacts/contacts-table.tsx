@@ -34,7 +34,7 @@ export default async function ContactsTable() {
     .where(eq(contactsTable.userId, user.id))
     .orderBy(contactsTable.firstName);
   return (
-    <Table className="w-full  table-fixed">
+    <Table className="w-full table-fixed">
       <TableHeader className="border-b-2 border-gray-200 pb-2">
         <TableRow>
           <TableHead>Name</TableHead>

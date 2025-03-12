@@ -1,5 +1,5 @@
 import { updateContact } from "@/lib/actions";
-import ConctactsForm from "../../create/contacts-form";
+import ConctactsForm from "../../contacts-form";
 import { db } from "@/app/db/db";
 import { contacts } from "@/app/db/schema";
 import { eq } from "drizzle-orm";

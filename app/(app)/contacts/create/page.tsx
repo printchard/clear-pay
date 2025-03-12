@@ -1,5 +1,5 @@
 import { addContact } from "@/lib/actions";
-import ConctactsForm from "./contacts-form";
+import ConctactsForm from "../contacts-form";
 import { getServerSession } from "next-auth";
 import { db } from "@/app/db/db";
 import { users } from "@/app/db/schema";

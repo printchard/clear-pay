@@ -26,6 +26,8 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const statusEnum = pgEnum("status", ["paid", "pending"]);
 
+export type StatusEnum = (typeof statusEnum.enumValues)[number];
+
 export const debts = pgTable("debts", {
   id: uuid().primaryKey().defaultRandom(),
   amount: integer().notNull(),

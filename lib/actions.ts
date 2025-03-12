@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/db/db";
-import { contacts } from "@/app/db/schema";
+import { contacts, debts, statusEnum } from "@/app/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -40,4 +40,19 @@ export async function updateContact(contactId: string, formData: FormData) {
 
   revalidatePath("/contacts");
   redirect("/contacts");
+}
+
+export async function createDebt(formData: FormData) {
+  const data = z
+    .object({
+      amount: z.coerce.number().min(0),
+      status: z.enum(statusEnum.enumValues),
+      contactId: z.string(),
+    })
+    .parse(Object.fromEntries(formData));
+
+  await db.insert(debts).values(data);
+
+  revalidatePath("/debts");
+  redirect("/debts");
 }
