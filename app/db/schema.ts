@@ -17,7 +17,7 @@ export const users = pgTable("users", {
   updatedAt: timestamp()
     .notNull()
     .defaultNow()
-    .$onUpdate(() => sql`current_timestamp`),
+    .$onUpdate(() => new Date()),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -35,7 +35,7 @@ export const debts = pgTable("debts", {
   updatedAt: timestamp()
     .notNull()
     .defaultNow()
-    .$onUpdate(() => sql`current_timestamp`),
+    .$onUpdate(() => new Date()),
 });
 
 export const debtsRelations = relations(debts, ({ one }) => ({
@@ -54,7 +54,7 @@ export const contacts = pgTable("contacts", {
   updatedAt: timestamp()
     .notNull()
     .defaultNow()
-    .$onUpdate(() => sql`current_timestamp`),
+    .$onUpdate(() => new Date()),
 });
 
 export const contactsRelations = relations(contacts, ({ one }) => ({
@@ -81,5 +81,5 @@ export const paymentInfos = pgTable("payment_infos", {
   updatedAt: timestamp()
     .notNull()
     .defaultNow()
-    .$onUpdate(() => sql`current_timestamp`),
+    .$onUpdate(() => new Date()),
 });

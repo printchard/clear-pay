@@ -27,3 +27,17 @@ export async function deleteContact(contactId: string) {
   await db.delete(contacts).where(eq(contacts.id, contactId));
   revalidatePath("/contacts");
 }
+
+export async function updateContact(contactId: string, formData: FormData) {
+  const data = z
+    .object({
+      firstName: z.string().min(2),
+      lastName: z.string().optional(),
+    })
+    .parse(Object.fromEntries(formData));
+  console.log(data);
+  await db.update(contacts).set(data).where(eq(contacts.id, contactId));
+
+  revalidatePath("/contacts");
+  redirect("/contacts");
+}

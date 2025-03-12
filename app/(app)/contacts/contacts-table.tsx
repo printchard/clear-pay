@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { eq } from "drizzle-orm";
 import { Pencil, Trash2 } from "lucide-react";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 
 export default async function ContactsTable() {
   const session = await getServerSession();
@@ -30,7 +31,8 @@ export default async function ContactsTable() {
   const contacts = await db
     .select()
     .from(contactsTable)
-    .where(eq(contactsTable.userId, user.id));
+    .where(eq(contactsTable.userId, user.id))
+    .orderBy(contactsTable.firstName);
   return (
     <Table className="w-full  table-fixed">
       <TableHeader className="border-b-2 border-gray-200 pb-2">
@@ -50,9 +52,11 @@ export default async function ContactsTable() {
               {dayjs(contact.createdAt).format("DD/MM/YYYY")}
             </TableCell>
             <TableCell className="flex justify-start gap-2">
-              <Button variant="secondary" size="icon">
-                <Pencil />
-              </Button>
+              <Link href={`/contacts/edit/${contact.id}`}>
+                <Button variant="secondary" size="icon">
+                  <Pencil />
+                </Button>
+              </Link>
               <Button
                 variant="destructive"
                 size="icon"
