@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import { redirect, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { z } from "zod";
@@ -52,6 +53,12 @@ export default function SigninForm() {
         <Button className="hover:cursor-pointer">Submit</Button>
       </form>
       {error && <p className="text-red-500">{error}</p>}
+      <div className="text-sm">
+        <span>Are you new to the app?</span>
+        <Link href="/auth/register">
+          <Button variant="link">Register</Button>
+        </Link>
+      </div>
     </Card>
   );
 }
