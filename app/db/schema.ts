@@ -24,36 +24,13 @@ export const usersRelations = relations(users, ({ many }) => ({
   contacts: many(contacts),
 }));
 
-export const statusEnum = pgEnum("status", ["paid", "pending"]);
-
-export type StatusEnum = (typeof statusEnum.enumValues)[number];
-
-export const debts = pgTable("debts", {
-  id: uuid().primaryKey().defaultRandom(),
-  amount: integer().notNull(),
-  status: statusEnum().default("pending"),
-  contactId: uuid().notNull(),
-  createdAt: timestamp().notNull().defaultNow(),
-  updatedAt: timestamp()
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-});
-
-export type Debt = typeof debts.$inferSelect;
-
-export const debtsRelations = relations(debts, ({ one }) => ({
-  contact: one(contacts, {
-    fields: [debts.contactId],
-    references: [contacts.id],
-  }),
-}));
-
 export const contacts = pgTable("contacts", {
   id: uuid().primaryKey().defaultRandom(),
   firstName: text().notNull(),
   lastName: text(),
-  userId: uuid(),
+  userId: uuid()
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp()
     .notNull()
@@ -70,6 +47,33 @@ export const contactsRelations = relations(contacts, ({ one }) => ({
 
 export type Contact = typeof contacts.$inferSelect;
 
+export const statusEnum = pgEnum("status", ["paid", "pending"]);
+
+export type StatusEnum = (typeof statusEnum.enumValues)[number];
+
+export const debts = pgTable("debts", {
+  id: uuid().primaryKey().defaultRandom(),
+  amount: integer().notNull(),
+  status: statusEnum().default("pending"),
+  contactId: uuid()
+    .references(() => contacts.id, { onDelete: "cascade" })
+    .notNull(),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp()
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export type Debt = typeof debts.$inferSelect;
+
+export const debtsRelations = relations(debts, ({ one }) => ({
+  contact: one(contacts, {
+    fields: [debts.contactId],
+    references: [contacts.id],
+  }),
+}));
+
 export const paymentInfoTypeEnum = pgEnum("payment_info", [
   "clabe",
   "tarjeta",
@@ -80,10 +84,17 @@ export const paymentInfos = pgTable("payment_infos", {
   id: uuid().primaryKey().defaultRandom(),
   type: paymentInfoTypeEnum().notNull(),
   data: text(),
-  contactId: uuid(),
+  contactId: uuid().references(() => contacts.id, { onDelete: "cascade" }),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp()
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
+
+export const paymentInfosRelations = relations(paymentInfos, ({ one }) => ({
+  contact: one(contacts, {
+    fields: [paymentInfos.contactId],
+    references: [contacts.id],
+  }),
+}));
