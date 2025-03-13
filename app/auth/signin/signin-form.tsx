@@ -30,7 +30,6 @@ export default function SigninForm() {
       })
       .parse(Object.fromEntries(new FormData(e.currentTarget)));
     const result = await signIn("credentials", { ...form, redirect: false });
-    console.log(form);
 
     if (result?.ok) {
       redirect(callbackUrl);

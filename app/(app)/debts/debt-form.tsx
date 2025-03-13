@@ -1,5 +1,5 @@
 import { db } from "@/app/db/db";
-import { contacts, users } from "@/app/db/schema";
+import { contacts, Debt, users } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,8 +18,10 @@ import { getServerSession } from "next-auth";
 
 export default async function DebtForm({
   action,
+  debt,
 }: {
   action: (formData: FormData) => void;
+  debt?: Debt;
 }) {
   const session = await getServerSession();
   const results = await db
@@ -32,9 +34,14 @@ export default async function DebtForm({
     <Card className="p-4">
       <form className="flex flex-col gap-y-4" action={action}>
         <Label>Amount</Label>
-        <Input type="number" min={0} name="amount"></Input>
+        <Input
+          type="number"
+          min={0}
+          name="amount"
+          defaultValue={debt?.amount}
+        ></Input>
         <Label>Status</Label>
-        <Select name="status">
+        <Select name="status" defaultValue={debt?.status as string}>
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Select the status" />
           </SelectTrigger>
@@ -47,7 +54,7 @@ export default async function DebtForm({
           </SelectContent>
         </Select>
         <Label>Contact</Label>
-        <Select name="contactId">
+        <Select name="contactId" defaultValue={debt?.contactId}>
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Select the contact" />
           </SelectTrigger>

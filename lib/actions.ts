@@ -56,3 +56,18 @@ export async function createDebt(formData: FormData) {
   revalidatePath("/debts");
   redirect("/debts");
 }
+
+export async function updateDebt(debtId: string, formData: FormData) {
+  const data = z
+    .object({
+      amount: z.coerce.number().min(0),
+      status: z.enum(statusEnum.enumValues),
+      contactId: z.string(),
+    })
+    .parse(Object.fromEntries(formData));
+
+  await db.update(debts).set(data).where(eq(debts.id, debtId));
+
+  revalidatePath("/debts");
+  redirect("/debts");
+}
