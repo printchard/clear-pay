@@ -92,6 +92,8 @@ export const paymentInfos = pgTable("payment_infos", {
     .$onUpdate(() => new Date()),
 });
 
+export type PaymentInfo = typeof paymentInfos.$inferSelect;
+
 export const paymentInfosRelations = relations(paymentInfos, ({ one }) => ({
   contact: one(contacts, {
     fields: [paymentInfos.contactId],
