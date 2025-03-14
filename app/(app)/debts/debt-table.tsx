@@ -15,6 +15,7 @@ import StatusBadge from "./status-badge";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
+import NoItems from "@/components/ui/no-items";
 
 export default async function DebtTable() {
   const session = await getServerSession();
@@ -25,6 +26,10 @@ export default async function DebtTable() {
     .innerJoin(users, eq(contacts.userId, users.id))
     .where(eq(users.email, session!.user!.email!))
     .orderBy(debts.createdAt);
+
+  if (results.length === 0) {
+    return <NoItems />;
+  }
 
   return (
     <Table className="table-fixed">
