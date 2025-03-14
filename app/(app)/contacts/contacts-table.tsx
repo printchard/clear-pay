@@ -53,8 +53,13 @@ export default async function ContactsTable() {
       <TableBody className="pt-10">
         {result.map(({ contact, owed }) => (
           <TableRow key={contact.id} className="">
-            <TableCell className="truncate">
-              {contact.firstName} {contact.lastName}
+            <TableCell>
+              <Link
+                href={`/contacts/${contact.id}`}
+                className="w-full block truncate"
+              >
+                {contact.firstName} {contact.lastName}
+              </Link>
             </TableCell>
             <TableCell>$ {owed ?? 0}</TableCell>
             <TableCell>
