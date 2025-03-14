@@ -61,7 +61,7 @@ export default async function ContactsTable() {
               {dayjs(contact.createdAt).format("DD/MM/YYYY")}
             </TableCell>
             <TableCell className="flex justify-start gap-2">
-              <Link href={`/contacts/edit/${contact.id}`}>
+              <Link href={`/contacts/${contact.id}/edit`}>
                 <Button variant="secondary" size="icon">
                   <Pencil />
                 </Button>

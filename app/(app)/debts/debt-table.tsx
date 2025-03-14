@@ -57,7 +57,7 @@ export default async function DebtTable() {
                 {dayjs(debt.createdAt).format("DD/MM/YYYY")}
               </TableCell>
               <TableCell className="flex justify-start gap-2">
-                <Link href={`/debts/edit/${debt.id}`}>
+                <Link href={`/debts/${debt.id}/edit`}>
                   <Button variant="secondary" size="icon">
                     <Pencil />
                   </Button>
