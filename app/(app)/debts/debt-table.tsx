@@ -1,5 +1,6 @@
-import { db } from "@/app/db/db";
-import { contacts, debts, users } from "@/app/db/schema";
+import { Contact, Debt } from "@/app/db/schema";
+import { Button } from "@/components/ui/button";
+import NoItems from "@/components/ui/no-items";
 import {
   Table,
   TableBody,
@@ -9,24 +10,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import dayjs from "dayjs";
-import { eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
-import StatusBadge from "./status-badge";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
-import NoItems from "@/components/ui/no-items";
+import Link from "next/link";
+import StatusBadge from "./status-badge";
 
-export default async function DebtTable() {
-  const session = await getServerSession();
-  const results = await db
-    .select({ debt: debts, contact: contacts })
-    .from(debts)
-    .innerJoin(contacts, eq(debts.contactId, contacts.id))
-    .innerJoin(users, eq(contacts.userId, users.id))
-    .where(eq(users.email, session!.user!.email!))
-    .orderBy(debts.createdAt);
+export type DebtTableProps = {
+  results: {
+    debt: Debt;
+    contact: Contact;
+  }[];
+};
 
+export default async function DebtTable({ results }: DebtTableProps) {
   if (results.length === 0) {
     return <NoItems />;
   }

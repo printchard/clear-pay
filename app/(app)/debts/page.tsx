@@ -2,8 +2,21 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import DebtTable from "./debt-table";
+import { getServerSession } from "next-auth";
+import { db } from "@/app/db/db";
+import { contacts, debts, users } from "@/app/db/schema";
+import { eq } from "drizzle-orm";
 
-export default function Page() {
+export default async function Page() {
+  const session = await getServerSession();
+  const results = await db
+    .select({ debt: debts, contact: contacts })
+    .from(debts)
+    .innerJoin(contacts, eq(debts.contactId, contacts.id))
+    .innerJoin(users, eq(contacts.userId, users.id))
+    .where(eq(users.email, session!.user!.email!))
+    .orderBy(debts.createdAt);
+
   return (
     <>
       <div className="flex justify-between">
@@ -14,7 +27,7 @@ export default function Page() {
           </Button>
         </Link>
       </div>
-      <DebtTable />
+      <DebtTable results={results} />
     </>
   );
 }
