@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import DebtTable from "./debt-table";
-import { getServerSession } from "next-auth";
 import { db } from "@/app/db/db";
 import { contacts, debts, users } from "@/app/db/schema";
-import { eq } from "drizzle-orm";
+import { Button } from "@/components/ui/button";
+import { desc, eq } from "drizzle-orm";
+import { Plus } from "lucide-react";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
+import DebtTable from "./debt-table";
 
 export default async function Page() {
   const session = await getServerSession();
@@ -15,7 +15,7 @@ export default async function Page() {
     .innerJoin(contacts, eq(debts.contactId, contacts.id))
     .innerJoin(users, eq(contacts.userId, users.id))
     .where(eq(users.email, session!.user!.email!))
-    .orderBy(debts.createdAt);
+    .orderBy(desc(debts.createdAt));
 
   return (
     <>

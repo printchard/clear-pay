@@ -1,16 +1,23 @@
 import { db } from "@/app/db/db";
 import { users } from "@/app/db/schema";
-import { eq } from "drizzle-orm";
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+import { eq } from "drizzle-orm";
+import NextAuth, { DefaultSession } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+
+declare module "next-auth" {
+  interface Session {
+    user?: {
+      id?: string;
+    } & DefaultSession["user"];
+  }
+}
 
 const handler = NextAuth({
   providers: [
     Credentials({
       name: "Credentials",
       async authorize(credentials) {
-        console.log(credentials);
         if (!credentials) {
           return null;
         }
@@ -24,9 +31,9 @@ const handler = NextAuth({
           return null;
         }
 
-        console.log(user);
-        if (await bcrypt.compare(credentials.password, user[0].password))
+        if (await bcrypt.compare(credentials.password, user[0].password)) {
           return user[0];
+        }
 
         console.error("Invalid credentials");
 
@@ -38,6 +45,18 @@ const handler = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) session.user.id = token.id as string;
+      return session;
+    },
+  },
 });
 
 export { handler as GET, handler as POST };

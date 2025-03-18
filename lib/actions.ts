@@ -2,23 +2,40 @@
 
 import { db } from "@/app/db/db";
 import { contacts, debts, statusEnum, users } from "@/app/db/schema";
+import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import bcrypt from "bcrypt";
 
-export async function addContact(userId: string, formData: FormData) {
-  const data = z
-    .object({
-      firstName: z.string().min(2),
-      lastName: z.string().optional(),
-    })
-    .parse(Object.fromEntries(formData));
+const contactsSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters" })
+    .max(50, { message: "First name must be at most 50 characters" }),
+  lastName: z.string().optional(),
+});
+
+export type AddContactFormErrors = z.inferFlattenedErrors<
+  typeof contactsSchema
+>["fieldErrors"];
+
+export async function addContact(
+  userId: string,
+  _: AddContactFormErrors,
+  formData: FormData
+) {
+  const parsedData = contactsSchema.safeParse(
+    Object.fromEntries(formData ? formData.entries() : [])
+  );
+
+  if (!parsedData.success) {
+    return parsedData.error.flatten().fieldErrors;
+  }
 
   await db.insert(contacts).values({
     userId,
-    ...data,
+    ...parsedData.data,
   });
   revalidatePath("/contacts");
   redirect("/contacts");
