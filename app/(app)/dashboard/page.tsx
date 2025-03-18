@@ -1,16 +1,24 @@
 import { db } from "@/app/db/db";
-import { contacts, debts } from "@/app/db/schema";
+import { contacts, debts, users } from "@/app/db/schema";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import dayjs from "dayjs";
-import { gte, sum, eq, desc } from "drizzle-orm";
+import { gte, sum, eq, desc, and } from "drizzle-orm";
 import DashboardChart from "./dashboard-chart";
-import { date } from "drizzle-orm/mysql-core";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function Page() {
+  const session = (await getServerSession(authConfig))!;
   const borrowedResult = await db
     .select({ owed: sum(debts.amount) })
     .from(debts)
-    .where(gte(debts.createdAt, dayjs().startOf("month").toDate()));
+    .innerJoin(contacts, eq(debts.contactId, contacts.id))
+    .where(
+      and(
+        gte(debts.createdAt, dayjs().startOf("month").toDate()),
+        eq(contacts.userId, session.user!.id!)
+      )
+    );
 
   const mostOwedResult = await db
     .select({ contact: contacts })
@@ -18,11 +26,15 @@ export default async function Page() {
     .innerJoin(debts, eq(contacts.id, debts.contactId))
     .groupBy(contacts.id)
     .orderBy(desc(sum(debts.amount)))
+    .where(eq(contacts.userId, session.user!.id!))
     .limit(1);
 
   const chartResult = await db
     .select({ date: debts.createdAt, amount: debts.amount })
-    .from(debts);
+    .from(debts)
+    .innerJoin(contacts, eq(debts.contactId, contacts.id))
+    .innerJoin(users, eq(contacts.userId, users.id))
+    .where(eq(users.id, session.user!.id!));
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-2 h-full gap-2 p-2">
