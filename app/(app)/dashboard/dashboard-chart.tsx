@@ -5,6 +5,7 @@ import {
   BarChart,
   CartesianGrid,
   Legend,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -12,13 +13,15 @@ import {
 
 export default function DashboardChart({ data }: { data: any }) {
   return (
-    <BarChart width={500} height={500} data={data}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="amount" fill="#8884d8" />
-    </BarChart>
+    <ResponsiveContainer width="100%" aspect={2}>
+      <BarChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="date" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="amount" fill="#32936f" name="Amount" />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }

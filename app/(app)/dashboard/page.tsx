@@ -4,6 +4,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import dayjs from "dayjs";
 import { gte, sum, eq, desc } from "drizzle-orm";
 import DashboardChart from "./dashboard-chart";
+import { date } from "drizzle-orm/mysql-core";
 
 export default async function Page() {
   const borrowedResult = await db
@@ -25,10 +26,15 @@ export default async function Page() {
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-2 h-full gap-2 p-2">
-      <Card className="col-span-2 row-span-2">
-        <CardTitle className="text-xl">Total Borrowed</CardTitle>
-        <CardContent>
-          <DashboardChart data={chartResult} />
+      <Card className="col-span-2 row-span-2 p-4">
+        <CardTitle className="text-xl">All debt</CardTitle>
+        <CardContent className="my-auto">
+          <DashboardChart
+            data={chartResult.map((result) => ({
+              ...result,
+              date: dayjs(result.date).format("DD/MM"),
+            }))}
+          />
         </CardContent>
       </Card>
       <Card className="p-4">
