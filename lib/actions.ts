@@ -47,7 +47,10 @@ export async function deleteContact(contactId: string) {
 }
 
 const updateContactSchema = z.object({
-  firstName: z.string().min(2),
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters" })
+    .max(50, { message: "First name must be at most 50 characters" }),
   lastName: z.string().optional(),
 });
 
@@ -102,9 +105,11 @@ export async function createDebt(_: CreateDebtFormErrors, formData: FormData) {
 }
 
 const updateDebtSchema = z.object({
-  amount: z.coerce.number().min(1),
-  status: z.enum(statusEnum.enumValues),
-  contactId: z.string().uuid(),
+  amount: z.coerce.number().min(1, { message: "Amount must be at least 1" }),
+  status: z.enum(statusEnum.enumValues, {
+    message: "Please select a valid status",
+  }),
+  contactId: z.string().uuid({ message: "Please select a valid contact" }),
 });
 
 export type UpdateDebtFormErrors = z.inferFlattenedErrors<
