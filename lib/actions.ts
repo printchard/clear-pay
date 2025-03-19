@@ -3,7 +3,7 @@
 import { db } from "@/app/db/db";
 import { contacts, debts, statusEnum, users } from "@/app/db/schema";
 import bcrypt from "bcrypt";
-import { eq, Update } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -136,14 +136,18 @@ export async function createUser(formData: FormData) {
       name: z.string().min(2),
       email: z.string().email(),
       password: z.string().min(8),
-      confirmPassword: z.string().min(8),
+      passwordConfirmation: z.string().min(8),
     })
     .parse(Object.fromEntries(formData));
 
-  if (data.password !== data.confirmPassword) {
-    throw new Error("Passwords do not match");
+  if (data.password !== data.passwordConfirmation) {
+    return;
   }
 
   const hash = await bcrypt.hash(data.password, 10);
-  await db.insert(users).values({ ...data, password: hash });
+  try {
+    await db.insert(users).values({ ...data, password: hash });
+  } catch (e) {
+    console.error(e);
+  }
 }

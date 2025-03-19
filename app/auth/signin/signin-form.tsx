@@ -29,8 +29,16 @@ export default function SigninForm() {
         email: z.string().email(),
         password: z.string().min(8),
       })
-      .parse(Object.fromEntries(new FormData(e.currentTarget)));
-    const result = await signIn("credentials", { ...form, redirect: false });
+      .safeParse(Object.fromEntries(new FormData(e.currentTarget)));
+
+    if (!form.success) {
+      setError("Invalid form data. Please try again.");
+      return;
+    }
+    const result = await signIn("credentials", {
+      ...form.data,
+      redirect: false,
+    });
 
     if (result?.ok) {
       redirect(callbackUrl);

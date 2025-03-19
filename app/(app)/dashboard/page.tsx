@@ -1,11 +1,11 @@
+import { authConfig } from "@/app/api/auth/[...nextauth]/route";
 import { db } from "@/app/db/db";
 import { contacts, debts, users } from "@/app/db/schema";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import dayjs from "dayjs";
-import { gte, sum, eq, desc, and } from "drizzle-orm";
-import DashboardChart from "./dashboard-chart";
+import { and, desc, eq, gte, sum } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authConfig } from "@/app/api/auth/[...nextauth]/route";
+import DashboardChart from "./dashboard-chart";
 
 export default async function Page() {
   const session = (await getServerSession(authConfig))!;
@@ -41,12 +41,18 @@ export default async function Page() {
       <Card className="col-span-2 row-span-2 p-4">
         <CardTitle className="text-xl">All debt</CardTitle>
         <CardContent className="my-auto">
-          <DashboardChart
-            data={chartResult.map((result) => ({
-              ...result,
-              date: dayjs(result.date).format("DD/MM"),
-            }))}
-          />
+          {chartResult.length > 0 ? (
+            <DashboardChart
+              data={chartResult.map((result) => ({
+                ...result,
+                date: dayjs(result.date).format("DD/MM"),
+              }))}
+            />
+          ) : (
+            <p className="text-2xl font-semibold text-center">
+              Add some debt to see the chart!
+            </p>
+          )}
         </CardContent>
       </Card>
       <Card className="p-4">
@@ -61,9 +67,11 @@ export default async function Page() {
         <CardTitle className="text-xl">Most Owed Contact</CardTitle>
         <CardContent className="flex justify-center items-center h-full">
           <p className="text-3xl text-center">
-            {mostOwedResult[0].contact.firstName +
-              " " +
-              mostOwedResult[0].contact.lastName}
+            {mostOwedResult.length > 0
+              ? mostOwedResult[0].contact.firstName +
+                " " +
+                mostOwedResult[0].contact.lastName
+              : "No contacts"}
           </p>
         </CardContent>
       </Card>
