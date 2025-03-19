@@ -1,7 +1,9 @@
-import { db } from "@/app/db/db";
-import { contacts, Debt, users } from "@/app/db/schema";
+"use client";
+
+import { Contact, Debt } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -13,33 +15,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
+import { createDebt, updateDebt } from "@/lib/actions";
+import { useActionState } from "react";
 
-export default async function DebtForm({
-  action,
+function getAction(edit: boolean, debtId?: string) {
+  if (edit) return updateDebt.bind(null, debtId!);
+  return createDebt;
+}
+
+export default function DebtForm({
   debt,
+  contacts,
+  edit,
 }: {
-  action: (formData: FormData) => void;
   debt?: Debt;
+  edit?: boolean;
+  contacts: Contact[];
 }) {
-  const session = await getServerSession();
-  const results = await db
-    .select({ contact: contacts })
-    .from(contacts)
-    .innerJoin(users, eq(contacts.userId, users.id))
-    .where(eq(users.email, session!.user!.email!));
+  const [error, formAction] = useActionState(
+    getAction(edit ?? false, debt?.id),
+    {}
+  );
 
   return (
     <Card className="p-4">
-      <form className="flex flex-col gap-y-4" action={action}>
+      <form className="flex flex-col gap-y-4" action={formAction}>
         <Label>Amount</Label>
-        <Input
-          type="number"
-          min={0}
-          name="amount"
-          defaultValue={debt?.amount}
-        ></Input>
+        <Input type="number" name="amount" defaultValue={debt?.amount}></Input>
+        <ErrorMessage error={error.amount?.at(0)} />
         <Label>Status</Label>
         <Select name="status" defaultValue={debt?.status as string}>
           <SelectTrigger className="w-32">
@@ -53,6 +56,7 @@ export default async function DebtForm({
             </SelectGroup>
           </SelectContent>
         </Select>
+        <ErrorMessage error={error.status?.at(0)} />
         <Label>Contact</Label>
         <Select name="contactId" defaultValue={debt?.contactId}>
           <SelectTrigger className="w-32">
@@ -61,7 +65,7 @@ export default async function DebtForm({
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Contact</SelectLabel>
-              {results.map(({ contact }) => (
+              {contacts.map((contact) => (
                 <SelectItem key={contact.id} value={contact.id}>
                   {contact.firstName} {contact.lastName}
                 </SelectItem>
@@ -69,6 +73,7 @@ export default async function DebtForm({
             </SelectGroup>
           </SelectContent>
         </Select>
+        <ErrorMessage error={error.contactId?.at(0)} />
         <Button>Submit</Button>
       </form>
     </Card>

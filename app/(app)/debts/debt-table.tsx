@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { deleteDebt } from "@/lib/actions";
 import dayjs from "dayjs";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -57,7 +58,11 @@ export default async function DebtTable({ results }: DebtTableProps) {
                     <Pencil />
                   </Button>
                 </Link>
-                <Button variant="destructive" size="icon">
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={deleteDebt.bind(null, debt.id)}
+                >
                   <Trash2 />
                 </Button>
               </TableCell>

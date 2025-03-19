@@ -1,8 +1,7 @@
-import { updateContact } from "@/lib/actions";
-import ConctactsForm from "../../contacts-form";
 import { db } from "@/app/db/db";
 import { contacts } from "@/app/db/schema";
 import { eq } from "drizzle-orm";
+import ConctactsForm from "../../contacts-form";
 
 export default async function Page({
   params,
@@ -13,7 +12,5 @@ export default async function Page({
   const contact = (
     await db.select().from(contacts).where(eq(contacts.id, id))
   )[0];
-  return (
-    <ConctactsForm action={updateContact.bind(null, id)} contact={contact} />
-  );
+  return <ConctactsForm contact={contact} edit />;
 }

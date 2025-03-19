@@ -3,12 +3,12 @@
 import { db } from "@/app/db/db";
 import { contacts, debts, statusEnum, users } from "@/app/db/schema";
 import bcrypt from "bcrypt";
-import { eq } from "drizzle-orm";
+import { eq, Update } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-const contactsSchema = z.object({
+const createContactSchema = z.object({
   firstName: z
     .string()
     .min(2, { message: "First name must be at least 2 characters" })
@@ -16,16 +16,16 @@ const contactsSchema = z.object({
   lastName: z.string().optional(),
 });
 
-export type AddContactFormErrors = z.inferFlattenedErrors<
-  typeof contactsSchema
+export type CreateContactFormErrors = z.inferFlattenedErrors<
+  typeof createContactSchema
 >["fieldErrors"];
 
-export async function addContact(
+export async function createContact(
   userId: string,
-  _: AddContactFormErrors,
+  _: CreateContactFormErrors,
   formData: FormData
 ) {
-  const parsedData = contactsSchema.safeParse(
+  const parsedData = createContactSchema.safeParse(
     Object.fromEntries(formData ? formData.entries() : [])
   );
 
@@ -46,48 +46,88 @@ export async function deleteContact(contactId: string) {
   revalidatePath("/contacts");
 }
 
-export async function updateContact(contactId: string, formData: FormData) {
-  const data = z
-    .object({
-      firstName: z.string().min(2),
-      lastName: z.string().optional(),
-    })
-    .parse(Object.fromEntries(formData));
-  console.log(data);
-  await db.update(contacts).set(data).where(eq(contacts.id, contactId));
+const updateContactSchema = z.object({
+  firstName: z.string().min(2),
+  lastName: z.string().optional(),
+});
+
+export type UpdateContactFormErrors = z.inferFlattenedErrors<
+  typeof updateContactSchema
+>["fieldErrors"];
+
+export async function updateContact(
+  contactId: string,
+  _: UpdateContactFormErrors,
+  formData: FormData
+) {
+  const parsedData = updateContactSchema.safeParse(
+    Object.fromEntries(formData)
+  );
+
+  if (!parsedData.success) {
+    return parsedData.error.flatten().fieldErrors;
+  }
+  await db
+    .update(contacts)
+    .set(parsedData.data)
+    .where(eq(contacts.id, contactId));
 
   revalidatePath("/contacts");
   redirect("/contacts");
 }
 
-export async function createDebt(formData: FormData) {
-  const data = z
-    .object({
-      amount: z.coerce.number().min(0),
-      status: z.enum(statusEnum.enumValues),
-      contactId: z.string(),
-    })
-    .parse(Object.fromEntries(formData));
+const createDebtSchema = z.object({
+  amount: z.coerce.number().min(1, { message: "Amount must be at least 1" }),
+  status: z.enum(statusEnum.enumValues, {
+    message: "Please select a valid status",
+  }),
+  contactId: z.string().uuid({ message: "Please select a valid contact" }),
+});
 
-  await db.insert(debts).values(data);
+export type CreateDebtFormErrors = z.inferFlattenedErrors<
+  typeof createDebtSchema
+>["fieldErrors"];
+
+export async function createDebt(_: CreateDebtFormErrors, formData: FormData) {
+  const parsedData = createDebtSchema.safeParse(Object.fromEntries(formData));
+
+  if (!parsedData.success) {
+    return parsedData.error.flatten().fieldErrors;
+  }
+
+  await db.insert(debts).values(parsedData.data);
 
   revalidatePath("/debts");
   redirect("/debts");
 }
 
-export async function updateDebt(debtId: string, formData: FormData) {
-  const data = z
-    .object({
-      amount: z.coerce.number().min(0),
-      status: z.enum(statusEnum.enumValues),
-      contactId: z.string(),
-    })
-    .parse(Object.fromEntries(formData));
+const updateDebtSchema = z.object({
+  amount: z.coerce.number().min(1),
+  status: z.enum(statusEnum.enumValues),
+  contactId: z.string().uuid(),
+});
 
-  await db.update(debts).set(data).where(eq(debts.id, debtId));
+export type UpdateDebtFormErrors = z.inferFlattenedErrors<
+  typeof updateDebtSchema
+>["fieldErrors"];
+
+export async function updateDebt(
+  debtId: string,
+  _: UpdateDebtFormErrors,
+  formData: FormData
+) {
+  const parsedData = updateDebtSchema.safeParse(Object.fromEntries(formData));
+  if (!parsedData.success) return parsedData.error.flatten().fieldErrors;
+
+  await db.update(debts).set(parsedData.data).where(eq(debts.id, debtId));
 
   revalidatePath("/debts");
   redirect("/debts");
+}
+
+export async function deleteDebt(debtId: string) {
+  await db.delete(debts).where(eq(debts.id, debtId));
+  revalidatePath("/debts");
 }
 
 export async function createUser(formData: FormData) {

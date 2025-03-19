@@ -5,14 +5,25 @@ import { Button } from "@/components/ui/button";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addContact } from "@/lib/actions";
+import { createContact, updateContact } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useActionState } from "react";
 
-export default function ConctactsForm({ contact }: { contact?: Contact }) {
+function getAction(edit: boolean, contactId?: string, userId?: string) {
+  if (edit) return updateContact.bind(null, contactId!);
+  return createContact.bind(null, userId!);
+}
+
+export default function ConctactsForm({
+  contact,
+  edit,
+}: {
+  contact?: Contact;
+  edit?: boolean;
+}) {
   const { data: session, status } = useSession();
   const [error, formAction] = useActionState(
-    addContact.bind(null, session?.user?.id!),
+    getAction(edit ?? false, contact?.id, session?.user?.id),
     {}
   );
 

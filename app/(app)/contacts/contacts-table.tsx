@@ -1,5 +1,6 @@
 "use server";
 
+import { authConfig } from "@/app/api/auth/[...nextauth]/route";
 import { db } from "@/app/db/db";
 import { contacts as contactsTable, debts, users } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
@@ -14,25 +15,25 @@ import {
 } from "@/components/ui/table";
 import { deleteContact } from "@/lib/actions";
 import dayjs from "dayjs";
-import { and, eq, isNull, or, sql, sum } from "drizzle-orm";
+import { eq, sql, sum } from "drizzle-orm";
 import { Pencil, Trash2 } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 export default async function ContactsTable() {
-  const session = await getServerSession();
+  const session = await getServerSession(authConfig);
 
   const result = await db
-    .select({ contact: contactsTable, owed: sum(debts.amount) })
+    .select({
+      contact: contactsTable,
+      owed: sum(
+        sql`CASE WHEN ${debts.status} = 'pending' THEN ${debts.amount} ELSE 0 END`
+      ),
+    })
     .from(contactsTable)
     .innerJoin(users, eq(contactsTable.userId, users.id))
     .leftJoin(debts, eq(contactsTable.id, debts.contactId))
-    .where(
-      and(
-        eq(users.email, session!.user!.email!),
-        or(eq(debts.status, "pending"), isNull(debts.id))
-      )
-    )
+    .where(eq(users.id, session!.user!.id!))
     .groupBy(contactsTable.id)
     .orderBy(contactsTable.firstName);
 
