@@ -4,6 +4,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  LabelList,
   Legend,
   ResponsiveContainer,
   Tooltip,
@@ -21,10 +22,17 @@ export default function DashboardChart({
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
-        <YAxis />
+        <YAxis
+          domain={[
+            0,
+            (dataMax: number) => Math.ceil((dataMax * 1.1) / 100) * 100,
+          ]}
+        />
         <Tooltip />
         <Legend />
-        <Bar dataKey="amount" fill="#32936f" name="Amount" />
+        <Bar dataKey="amount" fill="#32936f" name="Amount">
+          <LabelList dataKey="amount" position="top" />
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
