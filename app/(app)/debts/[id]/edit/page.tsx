@@ -1,10 +1,9 @@
-import { createDebt, updateDebt } from "@/lib/actions";
-import DebtForm from "../../debt-form";
+import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
 import { db } from "@/app/db/db";
 import { contacts, debts } from "@/app/db/schema";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authConfig } from "@/app/api/auth/[...nextauth]/route";
+import DebtForm from "../../debt-form";
 
 export default async function Page({
   params,

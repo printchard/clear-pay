@@ -1,4 +1,4 @@
-import { authConfig } from "@/app/api/auth/[...nextauth]/route";
+import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
 import { db } from "@/app/db/db";
 import { contacts, debts, users } from "@/app/db/schema";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";

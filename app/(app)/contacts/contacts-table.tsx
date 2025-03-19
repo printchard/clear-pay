@@ -1,6 +1,6 @@
 "use server";
 
-import { authConfig } from "@/app/api/auth/[...nextauth]/route";
+import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
 import { db } from "@/app/db/db";
 import { contacts as contactsTable, debts, users } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";

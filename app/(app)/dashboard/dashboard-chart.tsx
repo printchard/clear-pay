@@ -11,7 +11,11 @@ import {
   YAxis,
 } from "recharts";
 
-export default function DashboardChart({ data }: { data: any }) {
+export default function DashboardChart({
+  data,
+}: {
+  data: { date: string; amount: number }[];
+}) {
   return (
     <ResponsiveContainer width="100%" aspect={2}>
       <BarChart data={data}>
