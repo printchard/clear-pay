@@ -26,11 +26,7 @@ export default function PaymentInfosForm() {
     {}
   );
   return (
-    <form
-      className="flex flex-col gap-y-4"
-      action={formAction}
-      onSubmit={() => setType(undefined)}
-    >
+    <form className="flex flex-col gap-y-4" action={formAction}>
       <Label>Payment Information Type</Label>
       <Select value={type} name="type" onValueChange={setType} key={type}>
         <SelectTrigger className="w-48">

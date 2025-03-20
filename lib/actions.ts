@@ -99,7 +99,6 @@ export type CreateDebtFormErrors = z.inferFlattenedErrors<
 >["fieldErrors"];
 
 export async function createDebt(_: CreateDebtFormErrors, formData: FormData) {
-  console.log(formData);
   const parsedData = createDebtSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsedData.success) {
@@ -214,7 +213,6 @@ export async function createPaymentInfo(
   _: CreatePaymentInfoFormErrors,
   formData: FormData
 ) {
-  console.log(formData);
   const parsedData = createPaymentInfoSchema.safeParse(
     Object.fromEntries(formData)
   );
