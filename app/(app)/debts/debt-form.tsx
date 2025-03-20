@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createDebt, updateDebt } from "@/lib/actions";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 function getAction(edit: boolean, debtId?: string) {
   if (edit) return updateDebt.bind(null, debtId!);
@@ -36,6 +36,10 @@ export default function DebtForm({
     getAction(edit ?? false, debt?.id),
     {}
   );
+  const [contactId, setContactId] = useState(debt?.contactId);
+  const [status, setStatus] = useState<string | undefined>(
+    debt?.status as string | undefined
+  );
 
   return (
     <Card className="p-4">
@@ -44,7 +48,12 @@ export default function DebtForm({
         <Input type="number" name="amount" defaultValue={debt?.amount}></Input>
         <ErrorMessage error={error.amount?.at(0)} />
         <Label>Status</Label>
-        <Select name="status" defaultValue={debt?.status as string}>
+        <Select
+          name="status"
+          value={status}
+          onValueChange={setStatus}
+          key={status}
+        >
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Select the status" />
           </SelectTrigger>
@@ -58,7 +67,12 @@ export default function DebtForm({
         </Select>
         <ErrorMessage error={error.status?.at(0)} />
         <Label>Contact</Label>
-        <Select name="contactId" defaultValue={debt?.contactId}>
+        <Select
+          name="contactId"
+          value={contactId}
+          onValueChange={setContactId}
+          key={contactId}
+        >
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Select the contact" />
           </SelectTrigger>

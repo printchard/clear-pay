@@ -42,7 +42,7 @@ export default async function ContactsTable() {
   }
 
   return (
-    <Table className="w-full table-fixed">
+    <Table className="min-w-[600px] table-fixed">
       <TableHeader className="border-b-2 border-gray-200 pb-2">
         <TableRow>
           <TableHead>Name</TableHead>

@@ -3,7 +3,7 @@ import { db } from "@/app/db/db";
 import { contacts, debts, users } from "@/app/db/schema";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import dayjs from "dayjs";
-import { and, desc, eq, gte, sum } from "drizzle-orm";
+import { and, desc, eq, gte, sql, sum } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import DashboardChart from "./dashboard-chart";
 
@@ -29,12 +29,18 @@ export default async function Page() {
     .where(eq(contacts.userId, session.user!.id!))
     .limit(1);
 
+  const dateTruncated = sql`DATE(${debts.createdAt})`;
+
   const chartResult = await db
-    .select({ date: debts.createdAt, amount: debts.amount })
+    .select({
+      date: dateTruncated.mapWith(String),
+      amount: sum(debts.amount).mapWith(Number),
+    })
     .from(debts)
     .innerJoin(contacts, eq(debts.contactId, contacts.id))
     .innerJoin(users, eq(contacts.userId, users.id))
-    .where(eq(users.id, session.user!.id!));
+    .where(eq(users.id, session.user!.id!))
+    .groupBy(dateTruncated);
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-2 h-full gap-2 p-2">

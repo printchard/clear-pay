@@ -1,7 +1,14 @@
 "use server";
 
 import { db } from "@/app/db/db";
-import { contacts, debts, statusEnum, users } from "@/app/db/schema";
+import {
+  contacts,
+  debts,
+  paymentInfos,
+  paymentInfoTypeEnum,
+  statusEnum,
+  users,
+} from "@/app/db/schema";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -47,7 +54,10 @@ export async function deleteContact(contactId: string) {
 }
 
 const updateContactSchema = z.object({
-  firstName: z.string().min(2),
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters" })
+    .max(50, { message: "First name must be at most 50 characters" }),
   lastName: z.string().optional(),
 });
 
@@ -102,9 +112,11 @@ export async function createDebt(_: CreateDebtFormErrors, formData: FormData) {
 }
 
 const updateDebtSchema = z.object({
-  amount: z.coerce.number().min(1),
-  status: z.enum(statusEnum.enumValues),
-  contactId: z.string().uuid(),
+  amount: z.coerce.number().min(1, { message: "Amount must be at least 1" }),
+  status: z.enum(statusEnum.enumValues, {
+    message: "Please select a valid status",
+  }),
+  contactId: z.string().uuid({ message: "Please select a valid contact" }),
 });
 
 export type UpdateDebtFormErrors = z.inferFlattenedErrors<
@@ -150,4 +162,63 @@ export async function createUser(formData: FormData) {
   } catch (e) {
     console.error(e);
   }
+}
+
+const accountNumberSchema = z.string().regex(/^\d{10,12}$/);
+const clabeSchema = z.string().regex(/^\d{18}$/);
+const cardNumberSchema = z.string().regex(/^\d{16}$/);
+
+const createPaymentInfoSchema = z
+  .object({
+    type: z.enum(paymentInfoTypeEnum.enumValues, {
+      message: "Invalid payment info type",
+    }),
+    data: z.string(),
+  })
+  .superRefine((form, ctx) => {
+    let errorMessage = "";
+    switch (form.type) {
+      case "clabe":
+        if (!clabeSchema.safeParse(form.data).success) {
+          errorMessage = "Invalid CLABE (must be 18 digits)";
+        }
+        break;
+      case "cuenta":
+        if (!accountNumberSchema.safeParse(form.data).success) {
+          errorMessage = "Invalid account number (must be 10-12 digits)";
+        }
+        break;
+      case "tarjeta":
+        if (!cardNumberSchema.safeParse(form.data).success) {
+          errorMessage = "Invalid card number (must be 16 digits)";
+        }
+        break;
+    }
+
+    if (errorMessage === "") return;
+    ctx.addIssue({
+      message: errorMessage,
+      path: ["data"],
+      code: "invalid_string",
+      validation: "regex",
+    });
+  });
+
+export type CreatePaymentInfoFormErrors = z.inferFlattenedErrors<
+  typeof createPaymentInfoSchema
+>["fieldErrors"];
+
+export async function createPaymentInfo(
+  contactId: string,
+  _: CreatePaymentInfoFormErrors,
+  formData: FormData
+) {
+  const parsedData = createPaymentInfoSchema.safeParse(
+    Object.fromEntries(formData)
+  );
+  if (!parsedData.success) return parsedData.error.flatten().fieldErrors;
+
+  await db.insert(paymentInfos).values({ contactId, ...parsedData.data });
+  revalidatePath("/contacts/[id]/");
+  redirect(`/contacts/${contactId}/`);
 }

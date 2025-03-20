@@ -7,18 +7,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import dayjs from "dayjs";
-import { CreditCard } from "lucide-react";
+import { ArrowRightLeft, CreditCard, Landmark } from "lucide-react";
+import { ReactElement } from "react";
 
 export type PaymentInfoCardProps = {
   paymentInfo: PaymentInfo;
 };
 
 export default function PaymentInfoCard({ paymentInfo }: PaymentInfoCardProps) {
+  let icon: ReactElement;
+  switch (paymentInfo.type) {
+    case "clabe":
+      icon = <ArrowRightLeft />;
+      break;
+    case "cuenta":
+      icon = <Landmark />;
+      break;
+    case "tarjeta":
+      icon = <CreditCard />;
+      break;
+  }
+
   return (
-    <Card className="w-80">
+    <Card>
       <CardHeader>
         <CardTitle className="flex gap-x-2 items-center">
-          <CreditCard />
+          {icon}
           {paymentInfo.type.charAt(0).toUpperCase() + paymentInfo.type.slice(1)}
         </CardTitle>
       </CardHeader>
@@ -26,7 +40,9 @@ export default function PaymentInfoCard({ paymentInfo }: PaymentInfoCardProps) {
         <p>{paymentInfo.data}</p>
       </CardContent>
       <CardFooter>
-        <p>{dayjs(paymentInfo.createdAt).format("DD/MM/YYYY")}</p>
+        <p className="text-muted-foreground text-sm">
+          {dayjs(paymentInfo.createdAt).format("DD/MM/YYYY")}
+        </p>
       </CardFooter>
     </Card>
   );

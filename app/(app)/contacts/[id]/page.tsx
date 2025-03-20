@@ -53,13 +53,18 @@ export default async function Page({
               </Button>
             </Link>
           </div>
-          {paymentInfoResults.length > 0 ? (
-            paymentInfoResults.map(({ paymentInfo }) => (
-              <PaymentInfoCard key={paymentInfo.id} paymentInfo={paymentInfo} />
-            ))
-          ) : (
-            <NoItems />
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 overflow-y-scroll">
+            {paymentInfoResults.length > 0 ? (
+              paymentInfoResults.map(({ paymentInfo }) => (
+                <PaymentInfoCard
+                  key={paymentInfo.id}
+                  paymentInfo={paymentInfo}
+                />
+              ))
+            ) : (
+              <NoItems />
+            )}
+          </div>
         </section>
       </div>
     </div>
