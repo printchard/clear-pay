@@ -18,7 +18,7 @@ export default function DashboardChart({
   data: { date: string; amount: number }[];
 }) {
   return (
-    <ResponsiveContainer width="100%" aspect={2}>
+    <ResponsiveContainer height="100%" aspect={2}>
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
