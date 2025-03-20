@@ -43,8 +43,8 @@ export default async function Page() {
     .groupBy(dateTruncated);
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-2 h-full gap-2 p-2">
-      <Card className="col-span-2 row-span-2 p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-full gap-2 p-2 overflow-y-auto">
+      <Card className="md:col-span-2 lg:row-span-2 row-span-1 p-4">
         <CardTitle className="text-xl">All debt</CardTitle>
         <CardContent className="my-auto">
           {chartResult.length > 0 ? (
@@ -61,7 +61,7 @@ export default async function Page() {
           )}
         </CardContent>
       </Card>
-      <Card className="p-4">
+      <Card className="p-4 min-h-40">
         <CardTitle className="text-xl">
           Borrowed in {dayjs().format("MMMM")}
         </CardTitle>
@@ -69,7 +69,7 @@ export default async function Page() {
           <p className="text-3xl text-center">${borrowedResult[0].owed ?? 0}</p>
         </CardContent>
       </Card>
-      <Card className="p-4">
+      <Card className="p-4 min-h-40">
         <CardTitle className="text-xl">Most Owed Contact</CardTitle>
         <CardContent className="flex justify-center items-center h-full">
           <p className="text-3xl text-center">
