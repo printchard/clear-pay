@@ -28,7 +28,7 @@ export default async function DebtTable({ results }: DebtTableProps) {
   }
 
   return (
-    <Table className="table-fixed min-w-[600px] overflow-x-scroll">
+    <Table className="table-fixed min-w-[600px]">
       <TableHeader>
         <TableRow>
           <TableHead>Contact</TableHead>
