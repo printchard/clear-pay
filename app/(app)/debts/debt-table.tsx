@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import StatusBadge from "./status-badge";
+import DeleteDialog from "@/components/ui/delete-dialog";
 
 export type DebtTableProps = {
   results: {
@@ -43,7 +44,12 @@ export default async function DebtTable({ results }: DebtTableProps) {
           return (
             <TableRow key={debt.id}>
               <TableCell>
-                {contact.firstName} {contact.lastName}
+                <Link
+                  href={`/contacts/${contact.id}`}
+                  className="w-full h-full block truncate"
+                >
+                  {contact.firstName} {contact.lastName}
+                </Link>
               </TableCell>
               <TableCell>{`$ ${debt.amount}`}</TableCell>
               <TableCell>
@@ -58,13 +64,15 @@ export default async function DebtTable({ results }: DebtTableProps) {
                     <Pencil />
                   </Button>
                 </Link>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={deleteDebt.bind(null, debt.id)}
+                <DeleteDialog
+                  action={deleteDebt.bind(null, debt.id)}
+                  title="Are you sure you want to delete this debt?"
+                  description="This actions is irreversible"
                 >
-                  <Trash2 />
-                </Button>
+                  <Button variant="destructive" size="icon">
+                    <Trash2 />
+                  </Button>
+                </DeleteDialog>
               </TableCell>
             </TableRow>
           );

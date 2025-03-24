@@ -4,6 +4,7 @@ import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
 import { db } from "@/app/db/db";
 import { contacts as contactsTable, debts, users } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
+import DeleteDialog from "@/components/ui/delete-dialog";
 import NoItems from "@/components/ui/no-items";
 import {
   Table,
@@ -72,13 +73,15 @@ export default async function ContactsTable() {
                   <Pencil />
                 </Button>
               </Link>
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={deleteContact.bind(null, contact.id)}
+              <DeleteDialog
+                description="This action is irreversible"
+                title="Are you sure you want to delete this contact?"
+                action={deleteContact.bind(null, contact.id)}
               >
-                <Trash2 />
-              </Button>
+                <Button variant="destructive" size="icon">
+                  <Trash2 />
+                </Button>
+              </DeleteDialog>
             </TableCell>
           </TableRow>
         ))}
