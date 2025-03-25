@@ -14,14 +14,13 @@ import { DialogTrigger } from "@/components/ui/dialog";
 import dayjs from "dayjs";
 import {
   ArrowRightLeft,
-  Clipboard,
   CreditCard,
   Landmark,
   Pencil,
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
-import { Dispatch, ReactElement, SetStateAction, useState } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 
 export type PaymentInfoCardProps = {
   paymentInfo: PaymentInfo;
@@ -32,8 +31,6 @@ export default function PaymentInfoCard({
   paymentInfo,
   setId,
 }: PaymentInfoCardProps) {
-  const [copied, setCopied] = useState(false);
-
   let icon: ReactElement;
   let name: string;
   switch (paymentInfo.type) {
