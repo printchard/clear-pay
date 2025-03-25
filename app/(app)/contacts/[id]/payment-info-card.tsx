@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import CopyButton from "@/components/ui/copy-button";
 import { DialogTrigger } from "@/components/ui/dialog";
 import dayjs from "dayjs";
 import {
@@ -63,22 +64,7 @@ export default function PaymentInfoCard({
           <p className="tabular-nums">
             {paymentInfo.data!.replace(/(\d{4})/g, "$1 ")}
           </p>
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={async () => {
-              navigator.clipboard.writeText(paymentInfo.data ?? "");
-              setCopied(true);
-              setTimeout(() => setCopied(false), 2000);
-            }}
-          >
-            <Clipboard />
-          </Button>
-          {copied && (
-            <span className="text-muted-foreground text-xs">
-              Copied to cliboard!
-            </span>
-          )}
+          <CopyButton data={paymentInfo.data!} />
         </div>
       </CardContent>
       <CardFooter className="flex flex-row justify-between">
