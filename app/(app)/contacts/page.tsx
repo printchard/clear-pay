@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
+import { db } from "@/app/db/db";
+import { contacts, debts, users } from "@/app/db/schema";
+import PrimaryButton from "@/components/ui/primary-button";
+import { eq, sql, sum } from "drizzle-orm";
+import { UserRoundPlus } from "lucide-react";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import ContactsTable from "./contacts-table";
-import { Plus } from "lucide-react";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
-import { eq, sql, sum } from "drizzle-orm";
-import { debts, users, contacts } from "@/app/db/schema";
-import { db } from "@/app/db/db";
 
 export default async function Page() {
   const session = await getServerSession(authConfig);
@@ -30,9 +30,7 @@ export default async function Page() {
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Contacts</h1>
         <Link href="/contacts/create">
-          <Button className="hover:cursor-pointer" size="icon">
-            <Plus />
-          </Button>
+          <PrimaryButton icon={<UserRoundPlus />} text="New" />
         </Link>
       </div>
       <ContactsTable result={result} />
