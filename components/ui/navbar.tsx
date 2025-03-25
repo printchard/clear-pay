@@ -15,10 +15,20 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  useSidebar,
 } from "./sidebar";
+import { useEffect } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { isMobile, toggleSidebar } = useSidebar();
+
+  // @eslint-ignore-next-line
+  useEffect(() => {
+    if (isMobile) {
+      toggleSidebar();
+    }
+  }, [pathname]);
 
   const routes = [
     { name: "Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
@@ -27,7 +37,7 @@ export default function Navbar() {
   ];
 
   return (
-    <Sidebar className="flex flex-col items-center justify-start min-h-full w-60 gap-y-4 shrink-0">
+    <Sidebar className="flex h-full w-60 flex-col items-center justify-start gap-y-4">
       <SidebarHeader className="flex items-start justify-center p-7">
         <Link href="/dashboard" className="text-3xl font-bold">
           Clear<span className="text-primary">Pay</span>
