@@ -3,6 +3,7 @@
 import { Contact } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/components/ui/delete-dialog";
+import { DialogTrigger } from "@/components/ui/dialog";
 import NoItems from "@/components/ui/no-items";
 import {
   Table,
@@ -13,7 +14,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteContact } from "@/lib/actions";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 import dayjs from "dayjs";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";

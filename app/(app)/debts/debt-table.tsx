@@ -18,7 +18,7 @@ import Link from "next/link";
 import StatusBadge from "./status-badge";
 import DeleteDialog from "@/components/ui/delete-dialog";
 import { useState } from "react";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+import { DialogTrigger } from "@/components/ui/dialog";
 
 export type DebtTableProps = {
   results: {
