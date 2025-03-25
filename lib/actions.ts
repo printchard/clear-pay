@@ -30,10 +30,10 @@ export type CreateContactFormErrors = z.inferFlattenedErrors<
 export async function createContact(
   userId: string,
   _: CreateContactFormErrors,
-  formData: FormData
+  formData: FormData,
 ) {
   const parsedData = createContactSchema.safeParse(
-    Object.fromEntries(formData ? formData.entries() : [])
+    Object.fromEntries(formData ? formData.entries() : []),
   );
 
   if (!parsedData.success) {
@@ -68,10 +68,10 @@ export type UpdateContactFormErrors = z.inferFlattenedErrors<
 export async function updateContact(
   contactId: string,
   _: UpdateContactFormErrors,
-  formData: FormData
+  formData: FormData,
 ) {
   const parsedData = updateContactSchema.safeParse(
-    Object.fromEntries(formData)
+    Object.fromEntries(formData),
   );
 
   if (!parsedData.success) {
@@ -126,7 +126,7 @@ export type UpdateDebtFormErrors = z.inferFlattenedErrors<
 export async function updateDebt(
   debtId: string,
   _: UpdateDebtFormErrors,
-  formData: FormData
+  formData: FormData,
 ) {
   const parsedData = updateDebtSchema.safeParse(Object.fromEntries(formData));
   if (!parsedData.success) return parsedData.error.flatten().fieldErrors;
@@ -211,14 +211,43 @@ export type CreatePaymentInfoFormErrors = z.inferFlattenedErrors<
 export async function createPaymentInfo(
   contactId: string,
   _: CreatePaymentInfoFormErrors,
-  formData: FormData
+  formData: FormData,
 ) {
   const parsedData = createPaymentInfoSchema.safeParse(
-    Object.fromEntries(formData)
+    Object.fromEntries(formData),
   );
   if (!parsedData.success) return parsedData.error.flatten().fieldErrors;
 
   await db.insert(paymentInfos).values({ contactId, ...parsedData.data });
   revalidatePath("/contacts/[id]/");
   redirect(`/contacts/${contactId}/`);
+}
+
+const updatePaymentInfoSchema = createPaymentInfoSchema;
+
+export type UpdatePaymentInfoFormErrors = CreatePaymentInfoFormErrors;
+
+export async function updatePaymentInfo(
+  id: string,
+  contactId: string,
+  _: UpdatePaymentInfoFormErrors,
+  formData: FormData,
+) {
+  const parsedData = updatePaymentInfoSchema.safeParse(
+    Object.fromEntries(formData),
+  );
+  if (!parsedData.success) return parsedData.error.flatten().fieldErrors;
+
+  await db
+    .update(paymentInfos)
+    .set(parsedData.data)
+    .where(eq(paymentInfos.id, id));
+
+  revalidatePath("/contacts/[id]/");
+  redirect(`/contacts/${contactId!}/`);
+}
+
+export async function deletePaymentInfo(id: string) {
+  await db.delete(paymentInfos).where(eq(paymentInfos.id, id));
+  revalidatePath("/contacts/[id]/");
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { PaymentInfo } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
@@ -13,18 +14,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createPaymentInfo } from "@/lib/actions";
+import { createPaymentInfo, updatePaymentInfo } from "@/lib/actions";
 import { useParams } from "next/navigation";
 import { useActionState, useState } from "react";
 
-export default function PaymentInfosForm() {
+function getAction(
+  paymentInfo: PaymentInfo | undefined,
+  id: string,
+  pId: string,
+) {
+  if (paymentInfo) {
+    return updatePaymentInfo.bind(null, pId, id);
+  }
+  return createPaymentInfo.bind(null, id);
+}
+
+export default function PaymentInfosForm({
+  paymentInfo,
+}: {
+  paymentInfo?: PaymentInfo;
+}) {
   const params = useParams();
-  const [type, setType] = useState<string | undefined>(undefined);
+  const [type, setType] = useState<string | undefined>(paymentInfo?.type);
+  const [data, setData] = useState<string | undefined>(paymentInfo?.data ?? "");
 
   const [error, formAction] = useActionState(
-    createPaymentInfo.bind(null, params.id as string),
-    {}
+    getAction(paymentInfo, params.id as string, params.pId as string),
+    {},
   );
+
   return (
     <form className="flex flex-col gap-y-4" action={formAction}>
       <Label>Payment Information Type</Label>
@@ -43,7 +61,12 @@ export default function PaymentInfosForm() {
       </Select>
       <ErrorMessage error={error.type?.at(0)} />
       <Label>Payment Information</Label>
-      <Input type="text" name="data" />
+      <Input
+        type="text"
+        name="data"
+        value={data}
+        onChange={(e) => setData(e.target.value)}
+      />
       <ErrorMessage error={error.data?.at(0)} />
       <Button>Submit</Button>
     </form>
