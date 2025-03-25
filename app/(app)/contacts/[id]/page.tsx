@@ -1,12 +1,11 @@
 import { db } from "@/app/db/db";
 import { contacts, debts, paymentInfos } from "@/app/db/schema";
+import PrimaryButton from "@/components/ui/primary-button";
 import { eq } from "drizzle-orm";
-import DebtTable from "../../debts/debt-table";
+import { SquarePlus } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import PaymentInfoCard from "./payment-info-card";
-import NoItems from "@/components/ui/no-items";
+import DebtTable from "../../debts/debt-table";
+import PaymentInfoSection from "./payment-info-section";
 
 export default async function Page({
   params,
@@ -48,23 +47,10 @@ export default async function Page({
           <div className="flex justify-between">
             <h2 className="text-xl font-bold">Payment Information</h2>
             <Link href={`/contacts/${id}/payment-info/create`}>
-              <Button className="hover:cursor-pointer" size="icon">
-                <Plus />
-              </Button>
+              <PrimaryButton icon={<SquarePlus />} text="New" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 overflow-y-scroll">
-            {paymentInfoResults.length > 0 ? (
-              paymentInfoResults.map(({ paymentInfo }) => (
-                <PaymentInfoCard
-                  key={paymentInfo.id}
-                  paymentInfo={paymentInfo}
-                />
-              ))
-            ) : (
-              <NoItems />
-            )}
-          </div>
+          <PaymentInfoSection results={paymentInfoResults} />
         </section>
       </div>
     </div>
