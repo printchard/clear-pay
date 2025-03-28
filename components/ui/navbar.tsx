@@ -1,15 +1,16 @@
 "use client";
 
 import Navlink from "@/components/ui/navlink";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
 import {
-  LogOut,
-  LayoutDashboard,
-  Landmark,
   CircleUserRound,
+  Landmark,
+  LayoutDashboard,
+  LogOut,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -17,16 +18,15 @@ import {
   SidebarHeader,
   useSidebar,
 } from "./sidebar";
-import { useEffect } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isMobile, toggleSidebar } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
 
   // @eslint-ignore-next-line
   useEffect(() => {
     if (isMobile) {
-      toggleSidebar();
+      setOpenMobile(false);
     }
   }, [pathname]);
 
