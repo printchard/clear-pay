@@ -16,8 +16,8 @@ export default async function Page() {
     .where(
       and(
         gte(debts.createdAt, dayjs().startOf("month").toDate()),
-        eq(contacts.userId, session.user!.id!)
-      )
+        eq(contacts.userId, session.user!.id!),
+      ),
     );
 
   const mostOwedResult = await db
@@ -43,8 +43,8 @@ export default async function Page() {
     .groupBy(dateTruncated);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-full gap-2 p-2 overflow-y-auto">
-      <Card className="md:col-span-2 lg:row-span-2 row-span-1 p-4">
+    <div className="overflow-y-autom mb-4 grid h-full grid-cols-1 gap-2 p-2 md:grid-cols-2 lg:grid-cols-3">
+      <Card className="row-span-1 p-4 md:col-span-2 lg:row-span-2">
         <CardTitle className="text-xl">All debt</CardTitle>
         <CardContent className="my-auto">
           {chartResult.length > 0 ? (
@@ -55,24 +55,24 @@ export default async function Page() {
               }))}
             />
           ) : (
-            <p className="text-2xl font-semibold text-center">
+            <p className="text-center text-2xl font-semibold">
               Add some debt to see the chart!
             </p>
           )}
         </CardContent>
       </Card>
-      <Card className="p-4 min-h-40">
+      <Card className="min-h-40 p-4">
         <CardTitle className="text-xl">
           Borrowed in {dayjs().format("MMMM")}
         </CardTitle>
-        <CardContent className="flex justify-center items-center h-full">
-          <p className="text-3xl text-center">${borrowedResult[0].owed ?? 0}</p>
+        <CardContent className="flex h-full items-center justify-center">
+          <p className="text-center text-3xl">${borrowedResult[0].owed ?? 0}</p>
         </CardContent>
       </Card>
-      <Card className="p-4 min-h-40">
+      <Card className="min-h-40 p-4">
         <CardTitle className="text-xl">Most Owed Contact</CardTitle>
-        <CardContent className="flex justify-center items-center h-full">
-          <p className="text-3xl text-center">
+        <CardContent className="flex h-full items-center justify-center">
+          <p className="text-center text-3xl">
             {mostOwedResult.length > 0
               ? mostOwedResult[0].contact.firstName +
                 " " +

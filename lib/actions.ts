@@ -219,7 +219,7 @@ export async function createPaymentInfo(
   if (!parsedData.success) return parsedData.error.flatten().fieldErrors;
 
   await db.insert(paymentInfos).values({ contactId, ...parsedData.data });
-  revalidatePath("/contacts/[id]/");
+  revalidatePath(`/contacts/${contactId}/`);
   redirect(`/contacts/${contactId}/`);
 }
 
@@ -243,11 +243,11 @@ export async function updatePaymentInfo(
     .set(parsedData.data)
     .where(eq(paymentInfos.id, id));
 
-  revalidatePath("/contacts/[id]/");
+  revalidatePath(`/contacts/${contactId}/`);
   redirect(`/contacts/${contactId!}/`);
 }
 
 export async function deletePaymentInfo(id: string) {
   await db.delete(paymentInfos).where(eq(paymentInfos.id, id));
-  revalidatePath("/contacts/[id]/");
+  revalidatePath("/contacts/[id]/", "page");
 }
