@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSearchParam } from "@/lib/hooks/useSearchParam";
+import { useSearchParam } from "@/hooks/useSearchParam";
 import { Search } from "lucide-react";
 
 export default function DebtFilters() {
