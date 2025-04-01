@@ -38,7 +38,9 @@ export default function ContactsTable({
       action={action}
     >
       <div className="text-muted-foreground flex items-center justify-between gap-2">
-        <Search />
+        <picture className="size-6">
+          <Search />
+        </picture>
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
