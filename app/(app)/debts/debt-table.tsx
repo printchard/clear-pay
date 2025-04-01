@@ -2,6 +2,8 @@
 
 import { Contact, Debt } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
+import DeleteDialog from "@/components/ui/delete-dialog";
+import { DialogTrigger } from "@/components/ui/dialog";
 import NoItems from "@/components/ui/no-items";
 import {
   Table,
@@ -15,10 +17,8 @@ import { deleteDebt } from "@/lib/actions";
 import dayjs from "dayjs";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import StatusBadge from "./status-badge";
-import DeleteDialog from "@/components/ui/delete-dialog";
 import { useState } from "react";
-import { DialogTrigger } from "@/components/ui/dialog";
+import StatusBadge from "./status-badge";
 
 export type DebtTableProps = {
   results: {
@@ -40,7 +40,7 @@ export default function DebtTable({ results }: DebtTableProps) {
     <DeleteDialog
       action={action}
       title="Are you sure you want to delete this debt?"
-      description="This actions is irreversible"
+      description="This action is irreversible"
     >
       <Table className="min-w-[600px] table-fixed">
         <TableHeader>

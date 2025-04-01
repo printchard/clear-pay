@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createDebt, updateDebt } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
 
 function getAction(edit: boolean, debtId?: string) {
@@ -34,12 +35,13 @@ export default function DebtForm({
 }) {
   const [error, formAction] = useActionState(
     getAction(edit ?? false, debt?.id),
-    {}
+    {},
   );
   const [contactId, setContactId] = useState(debt?.contactId);
   const [status, setStatus] = useState<string | undefined>(
-    debt?.status as string | undefined
+    debt?.status as string | undefined,
   );
+  const router = useRouter();
 
   return (
     <Card className="p-4">
@@ -88,7 +90,19 @@ export default function DebtForm({
           </SelectContent>
         </Select>
         <ErrorMessage error={error.contactId?.at(0)} />
-        <Button>Submit</Button>
+        <div className="flex w-full flex-row gap-4">
+          <Button
+            type="button"
+            variant="secondary"
+            className="flex-1"
+            onClick={() => router.back()}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" className="flex-1">
+            Submit
+          </Button>
+        </div>
       </form>
     </Card>
   );

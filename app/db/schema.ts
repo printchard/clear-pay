@@ -51,6 +51,13 @@ export const statusEnum = pgEnum("status", ["paid", "pending"]);
 
 export type StatusEnum = (typeof statusEnum.enumValues)[number];
 
+export function parseStatusEnum(value: string) {
+  if (statusEnum.enumValues.includes(value as StatusEnum)) {
+    return value as StatusEnum;
+  }
+  return undefined;
+}
+
 export const debts = pgTable("debts", {
   id: uuid().primaryKey().defaultRandom(),
   amount: integer().notNull(),

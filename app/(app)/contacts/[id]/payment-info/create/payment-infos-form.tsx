@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createPaymentInfo, updatePaymentInfo } from "@/lib/actions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
 
 function getAction(
@@ -35,6 +35,7 @@ export default function PaymentInfosForm({
   paymentInfo?: PaymentInfo;
 }) {
   const params = useParams();
+  const router = useRouter();
   const [type, setType] = useState<string | undefined>(paymentInfo?.type);
   const [data, setData] = useState<string | undefined>(paymentInfo?.data ?? "");
 
@@ -68,7 +69,19 @@ export default function PaymentInfosForm({
         onChange={(e) => setData(e.target.value)}
       />
       <ErrorMessage error={error.data?.at(0)} />
-      <Button>Submit</Button>
+      <div className="flex gap-4">
+        <Button
+          className="flex-1"
+          type="button"
+          variant="secondary"
+          onClick={() => router.back()}
+        >
+          Cancel
+        </Button>
+        <Button className="flex-1" type="submit">
+          Submit
+        </Button>
+      </div>
     </form>
   );
 }
