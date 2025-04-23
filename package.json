@@ -44,7 +44,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.30.5",
-    "eslint": "^9",
+    "eslint": "8",
     "eslint-config-next": "15.2.1",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
@@ -53,7 +53,9 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "bcrypt"
+      "bcrypt",
+      "esbuild",
+      "sharp"
     ]
   },
   "prettier": {
