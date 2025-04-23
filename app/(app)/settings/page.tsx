@@ -5,9 +5,7 @@ import { Label } from "@/components/ui/label";
 import { getServerSession } from "next-auth";
 import PasswordChangeForm from "./password-change-form";
 
-export default async function Page({
-  searchParams,
-}: {
+export default async function Page({}: {
   searchParams: Promise<{ status: string }>;
 }) {
   const session = await getServerSession(authConfig);

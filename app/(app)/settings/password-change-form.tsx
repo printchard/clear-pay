@@ -11,7 +11,7 @@ import { useActionState } from "react";
 export default function PasswordChangeForm() {
   const session = useSession(); // Replace with actual user ID
   const [state, formAction] = useActionState(
-    updateUserPassword.bind(null, session?.data?.user?.id!),
+    updateUserPassword.bind(null, session!.data!.user!.id!),
     {},
   );
 

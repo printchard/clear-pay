@@ -36,21 +36,27 @@ export default function ConctactsForm({
   return (
     <Card className="p-4">
       <form action={formAction} className="flex flex-col gap-y-4">
-        <Label htmlFor="firstName">First Name</Label>
-        <Input
-          type="text"
-          name="firstName"
-          placeholder="First Name"
-          defaultValue={contact?.firstName}
-        />
-        <ErrorMessage error={error?.firstName?.at(0)} />
-        <Label htmlFor="lastName">Last Name</Label>
-        <Input
-          type="text"
-          name="lastName"
-          placeholder="Last Name"
-          defaultValue={contact?.lastName ?? undefined}
-        />
+        <fieldset className="flex flex-row gap-4">
+          <div className="flex flex-1 flex-col gap-2">
+            <Label htmlFor="firstName">First Name</Label>
+            <Input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              defaultValue={contact?.firstName}
+            />
+            <ErrorMessage error={error?.firstName?.at(0)} />
+          </div>
+          <div className="flex flex-1 flex-col gap-2">
+            <Label htmlFor="lastName">Last Name</Label>
+            <Input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              defaultValue={contact?.lastName ?? undefined}
+            />
+          </div>
+        </fieldset>
         <div className="flex flex-row gap-4">
           <Button
             className="flex-1"
