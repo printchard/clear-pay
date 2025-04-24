@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deleteContact } from "@/lib/actions";
+import { deleteContact } from "@/lib/actions/contacts";
 import { useSearchParam } from "@/hooks/useSearchParam";
 import dayjs from "dayjs";
 import { Pencil, Search, Trash2 } from "lucide-react";

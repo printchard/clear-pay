@@ -14,7 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createPaymentInfo, updatePaymentInfo } from "@/lib/actions";
+import {
+  createPaymentInfo,
+  updatePaymentInfo,
+} from "@/lib/actions/paymentInfos";
 import { useParams, useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
 

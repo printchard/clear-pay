@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateUserPassword } from "@/lib/actions";
+import { updateUserPassword } from "@/lib/actions/users";
 import { useSession } from "next-auth/react";
 import { useActionState } from "react";
 
