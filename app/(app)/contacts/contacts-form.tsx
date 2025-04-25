@@ -11,8 +11,12 @@ import { createContact, updateContact } from "@/lib/actions/contacts";
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
 
-function getAction(edit: boolean, contactId: string, userId: string) {
-  if (edit) return updateContact.bind(null, contactId);
+function getAction(
+  edit: boolean,
+  contactId: string | undefined,
+  userId: string,
+) {
+  if (edit) return updateContact.bind(null, contactId!);
   return createContact.bind(null, userId);
 }
 
@@ -25,7 +29,7 @@ export default function ConctactsForm({
 }) {
   const session = useSession();
   const [error, formAction] = useActionState(
-    getAction(edit ?? false, contact!.id, session.id),
+    getAction(edit ?? false, contact?.id, session.id),
     {},
   );
 

@@ -2,7 +2,7 @@ import { SessionProvider } from "@/components/session-context";
 import Navbar from "@/components/ui/navbar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { verifyJWT } from "@/lib/auth";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function RootLayout({
@@ -14,10 +14,9 @@ export default async function RootLayout({
   const cookie = cookieStore.get("jwt");
   const session = cookie ? verifyJWT(cookie.value) : null;
   if (!session) {
-    const headerStore = await headers();
-    const callbackUrl = headerStore.get("clear-pay-callback-url");
-    const redirectUrl = callbackUrl
-      ? `/auth/signin?callbackUrl=${callbackUrl}`
+    const callbackUrl = cookieStore.get("clear-pay-callback-url");
+    const redirectUrl = callbackUrl?.value
+      ? `/auth/signin?callbackUrl=${callbackUrl.value}`
       : "/auth/signin";
 
     redirect(redirectUrl);
