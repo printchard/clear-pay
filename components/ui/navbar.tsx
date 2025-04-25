@@ -1,6 +1,7 @@
 "use client";
 
 import Navlink from "@/components/ui/navlink";
+import { signOut } from "@/lib/actions/auth";
 import {
   CircleUserRound,
   Landmark,
@@ -8,7 +9,6 @@ import {
   LogOut,
   Settings,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -61,7 +61,7 @@ export default function Navbar() {
           href="/settings"
           isActive={pathname === "/settings"}
         ></Navlink>
-        <Navlink name="Sign Out" icon={<LogOut />} onClick={signOut}></Navlink>
+        <Navlink name="Sign Out" icon={<LogOut />} onClick={signOut} />
       </SidebarFooter>
     </Sidebar>
   );

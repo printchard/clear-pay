@@ -1,17 +1,17 @@
 "use client";
 
+import { useSession } from "@/components/session-context";
 import { Button } from "@/components/ui/button";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateUserPassword } from "@/lib/actions/users";
-import { useSession } from "next-auth/react";
 import { useActionState } from "react";
 
 export default function PasswordChangeForm() {
-  const session = useSession(); // Replace with actual user ID
+  const session = useSession();
   const [state, formAction] = useActionState(
-    updateUserPassword.bind(null, session!.data!.user!.id!),
+    updateUserPassword.bind(null, session!.id),
     {},
   );
 

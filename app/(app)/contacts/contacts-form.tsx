@@ -1,19 +1,19 @@
 "use client";
 
 import { Contact } from "@/app/db/schema";
+import { useSession } from "@/components/session-context";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createContact, updateContact } from "@/lib/actions/contacts";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
 
-function getAction(edit: boolean, contactId?: string, userId?: string) {
-  if (edit) return updateContact.bind(null, contactId!);
-  return createContact.bind(null, userId!);
+function getAction(edit: boolean, contactId: string, userId: string) {
+  if (edit) return updateContact.bind(null, contactId);
+  return createContact.bind(null, userId);
 }
 
 export default function ConctactsForm({
@@ -23,15 +23,13 @@ export default function ConctactsForm({
   contact?: Contact;
   edit?: boolean;
 }) {
-  const { data: session, status } = useSession();
+  const session = useSession();
   const [error, formAction] = useActionState(
-    getAction(edit ?? false, contact?.id, session?.user?.id),
+    getAction(edit ?? false, contact!.id, session.id),
     {},
   );
 
   const router = useRouter();
-
-  if (status === "loading") return <div>Loading...</div>;
 
   return (
     <Card className="p-4">

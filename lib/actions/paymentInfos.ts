@@ -6,10 +6,8 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { accountNumberSchema, cardNumberSchema, clabeSchema } from "../utils";
 
-export const accountNumberSchema = z.string().regex(/^\d{10,12}$/);
-export const clabeSchema = z.string().regex(/^\d{18}$/);
-export const cardNumberSchema = z.string().regex(/^\d{16}$/);
 const createPaymentInfoSchema = z
   .object({
     type: z.enum(paymentInfoTypeEnum.enumValues, {

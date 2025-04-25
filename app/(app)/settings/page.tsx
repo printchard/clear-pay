@@ -1,14 +1,13 @@
-import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getServerSession } from "next-auth";
+import { getSession } from "@/lib/actions/auth";
 import PasswordChangeForm from "./password-change-form";
 
 export default async function Page({}: {
   searchParams: Promise<{ status: string }>;
 }) {
-  const session = await getServerSession(authConfig);
+  const session = await getSession();
 
   return (
     <>
@@ -19,9 +18,9 @@ export default async function Page({}: {
         <h2 className="text-xl font-semibold">Profile details</h2>
         <form className="flex max-w-3xl flex-col gap-y-4">
           <Label>Name</Label>
-          <Input defaultValue={session!.user!.name!} />
+          <Input defaultValue={session!.name} />
           <Label>Email</Label>
-          <Input defaultValue={session!.user!.email!} />
+          <Input defaultValue={session!.email} />
           <Button className="max-w-40">Save</Button>
         </form>
       </section>
