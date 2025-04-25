@@ -1,6 +1,6 @@
 "use client";
 
-import { PaymentInfo } from "@/app/db/schema";
+import { PaymentInfo } from "@/db/schema";
 import PaymentInfoCard from "./payment-info-card";
 import NoItems from "@/components/ui/no-items";
 import DeleteDialog from "@/components/ui/delete-dialog";

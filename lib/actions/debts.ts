@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "@/app/db/db";
-import { debts, statusEnum } from "@/app/db/schema";
+import { db } from "@/db/db";
+import { debts, statusEnum } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";

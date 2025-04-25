@@ -1,5 +1,5 @@
-import { db } from "@/app/db/db";
-import { contacts, debts, paymentInfos } from "@/app/db/schema";
+import { db } from "@/db/db";
+import { contacts, debts, paymentInfos } from "@/db/schema";
 import PrimaryButton from "@/components/ui/primary-button";
 import { eq } from "drizzle-orm";
 import { SquarePlus } from "lucide-react";

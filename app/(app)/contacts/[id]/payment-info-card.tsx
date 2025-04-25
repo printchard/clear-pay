@@ -1,6 +1,6 @@
 "use client";
 
-import { PaymentInfo } from "@/app/db/schema";
+import { PaymentInfo } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import {
   Card,

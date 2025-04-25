@@ -1,6 +1,6 @@
 "use client";
 
-import { Contact } from "@/app/db/schema";
+import { Contact } from "@/db/schema";
 import { useSession } from "@/components/session-context";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

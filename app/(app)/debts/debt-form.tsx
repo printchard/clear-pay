@@ -1,6 +1,6 @@
 "use client";
 
-import { Contact, Debt } from "@/app/db/schema";
+import { Contact, Debt } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import DatePicker from "@/components/ui/date-picker";

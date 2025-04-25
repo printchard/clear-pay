@@ -1,6 +1,6 @@
 "use client";
 
-import { parseStatusEnum } from "@/app/db/schema";
+import { parseStatusEnum } from "@/db/schema";
 import { Input } from "@/components/ui/input";
 import {
   Select,

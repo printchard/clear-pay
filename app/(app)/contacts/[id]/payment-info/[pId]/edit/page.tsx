@@ -1,6 +1,6 @@
-import { db } from "@/app/db/db";
+import { db } from "@/db/db";
 import PaymentInfosForm from "../../create/payment-infos-form";
-import { paymentInfos } from "@/app/db/schema";
+import { paymentInfos } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export default async function Page({

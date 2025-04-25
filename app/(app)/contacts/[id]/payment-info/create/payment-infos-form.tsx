@@ -1,6 +1,6 @@
 "use client";
 
-import { PaymentInfo } from "@/app/db/schema";
+import { PaymentInfo } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";

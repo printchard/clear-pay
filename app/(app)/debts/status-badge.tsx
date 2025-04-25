@@ -1,4 +1,4 @@
-import { StatusEnum } from "@/app/db/schema";
+import { StatusEnum } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import clsx from "clsx";
 

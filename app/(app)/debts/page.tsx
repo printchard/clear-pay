@@ -1,5 +1,5 @@
-import { db } from "@/app/db/db";
-import { contacts, debts, parseStatusEnum, users } from "@/app/db/schema";
+import { db } from "@/db/db";
+import { contacts, debts, parseStatusEnum, users } from "@/db/schema";
 import PrimaryButton from "@/components/ui/primary-button";
 import { getSession } from "@/lib/actions/auth";
 import { and, desc, eq, ilike, or } from "drizzle-orm";

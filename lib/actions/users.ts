@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "@/app/db/db";
-import { users } from "@/app/db/schema";
+import { db } from "@/db/db";
+import { users } from "@/db/schema";
 import { issueJWT } from "@/lib/auth";
 import bcrypt from "bcrypt";
 import dayjs from "dayjs";

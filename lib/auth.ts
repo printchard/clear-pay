@@ -1,4 +1,4 @@
-import { User } from "@/app/db/schema";
+import { User } from "@/db/schema";
 import { z } from "zod";
 import dayjs from "dayjs";
 import jwt, { JwtPayload } from "jsonwebtoken";

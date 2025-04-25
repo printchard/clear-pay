@@ -1,5 +1,5 @@
-import { db } from "@/app/db/db";
-import { contacts, debts } from "@/app/db/schema";
+import { db } from "@/db/db";
+import { contacts, debts } from "@/db/schema";
 import { getSession } from "@/lib/actions/auth";
 import { eq } from "drizzle-orm";
 import DebtForm from "../../debt-form";

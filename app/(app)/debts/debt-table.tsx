@@ -1,6 +1,6 @@
 "use client";
 
-import { Contact, Debt } from "@/app/db/schema";
+import { Contact, Debt } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/components/ui/delete-dialog";
 import { DialogTrigger } from "@/components/ui/dialog";
