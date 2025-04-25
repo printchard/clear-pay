@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createDebt, updateDebt } from "@/lib/actions";
+import { createDebt, updateDebt } from "@/lib/actions/debts";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
 
@@ -38,9 +38,7 @@ export default function DebtForm({
     {},
   );
   const [contactId, setContactId] = useState(debt?.contactId);
-  const [status, setStatus] = useState<string | undefined>(
-    debt?.status as string | undefined,
-  );
+  const [status, setStatus] = useState<string>(debt?.status ?? "pending");
   const router = useRouter();
 
   return (
@@ -49,47 +47,53 @@ export default function DebtForm({
         <Label>Amount</Label>
         <Input type="number" name="amount" defaultValue={debt?.amount}></Input>
         <ErrorMessage error={error.amount?.at(0)} />
-        <Label>Status</Label>
-        <Select
-          name="status"
-          value={status}
-          onValueChange={setStatus}
-          key={status}
-        >
-          <SelectTrigger className="w-32">
-            <SelectValue placeholder="Select the status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Status</SelectLabel>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="paid">Paid</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <ErrorMessage error={error.status?.at(0)} />
-        <Label>Contact</Label>
-        <Select
-          name="contactId"
-          value={contactId}
-          onValueChange={setContactId}
-          key={contactId}
-        >
-          <SelectTrigger className="w-32">
-            <SelectValue placeholder="Select the contact" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Contact</SelectLabel>
-              {contacts.map((contact) => (
-                <SelectItem key={contact.id} value={contact.id}>
-                  {contact.firstName} {contact.lastName}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <ErrorMessage error={error.contactId?.at(0)} />
+        <fieldset className="flex flex-row gap-4">
+          <div className="flex flex-1 flex-col gap-2">
+            <Label>Status</Label>
+            <Select
+              name="status"
+              value={status}
+              onValueChange={setStatus}
+              key={status}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select the status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Status</SelectLabel>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="paid">Paid</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <ErrorMessage error={error.status?.at(0)} />
+          </div>
+          <div className="flex flex-1 flex-col gap-2">
+            <Label>Contact</Label>
+            <Select
+              name="contactId"
+              value={contactId}
+              onValueChange={setContactId}
+              key={contactId}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select the contact" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Contact</SelectLabel>
+                  {contacts.map((contact) => (
+                    <SelectItem key={contact.id} value={contact.id}>
+                      {contact.firstName} {contact.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <ErrorMessage error={error.contactId?.at(0)} />
+          </div>
+        </fieldset>
         <div className="flex w-full flex-row gap-4">
           <Button
             type="button"

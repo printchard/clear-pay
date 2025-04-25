@@ -24,6 +24,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   contacts: many(contacts),
 }));
 
+export type User = typeof users.$inferSelect;
+
 export const contacts = pgTable("contacts", {
   id: uuid().primaryKey().defaultRandom(),
   firstName: text().notNull(),

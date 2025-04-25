@@ -5,9 +5,7 @@ import { Card } from "@/components/ui/card";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -16,7 +14,6 @@ export default function RegisterForm({
 }: {
   action: (formData: FormData) => Promise<void>;
 }) {
-  const session = useSession();
   const signInSchema = z
     .object({
       name: z.string().min(2),
@@ -31,7 +28,6 @@ export default function RegisterForm({
   const [error, setError] = useState<
     z.inferFlattenedErrors<typeof signInSchema>["fieldErrors"]
   >({});
-  if (session.status === "authenticated") redirect("/dashboard");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,14 +40,6 @@ export default function RegisterForm({
     }
 
     await action(formData);
-    const result = await signIn("credentials", {
-      ...credentials.data,
-      redirect: false,
-    });
-
-    if (result?.ok) {
-      redirect("/dashboard");
-    }
   }
 
   return (
@@ -59,7 +47,7 @@ export default function RegisterForm({
       <h1 className="text-4xl font-bold">
         Clear <span className="text-primary">Pay</span>
       </h1>
-      <h2 className="font-bold text-2xl">Register</h2>
+      <h2 className="text-2xl font-bold">Register</h2>
       <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
         <Label>Name</Label>
         <Input name="name" />

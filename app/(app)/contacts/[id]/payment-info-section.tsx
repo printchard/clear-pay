@@ -4,7 +4,7 @@ import { PaymentInfo } from "@/app/db/schema";
 import PaymentInfoCard from "./payment-info-card";
 import NoItems from "@/components/ui/no-items";
 import DeleteDialog from "@/components/ui/delete-dialog";
-import { deletePaymentInfo } from "@/lib/actions";
+import { deletePaymentInfo } from "@/lib/actions/paymentInfos";
 import { useState } from "react";
 
 export default function PaymentInfoSection({

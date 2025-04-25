@@ -1,13 +1,9 @@
-import { withAuth } from "next-auth/middleware";
+import { NextRequest, NextResponse } from "next/server";
 
-export default withAuth({
-  pages: {
-    signIn: "/auth/signin",
-  },
-});
-
-export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|.*\\.png$|seed|auth/register).*)",
-  ],
-};
+export default async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
+  res.cookies.set("clear-pay-callback-url", req.nextUrl.pathname, {
+    httpOnly: true,
+  });
+  return res;
+}

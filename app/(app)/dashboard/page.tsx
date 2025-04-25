@@ -1,14 +1,13 @@
-import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
 import { db } from "@/app/db/db";
 import { contacts, debts, users } from "@/app/db/schema";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { getSession } from "@/lib/actions/auth";
 import dayjs from "dayjs";
 import { and, desc, eq, gte, sql, sum } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import DashboardChart from "./dashboard-chart";
 
 export default async function Page() {
-  const session = (await getServerSession(authConfig))!;
+  const session = await getSession();
   const borrowedResult = await db
     .select({ owed: sum(debts.amount) })
     .from(debts)
@@ -16,7 +15,7 @@ export default async function Page() {
     .where(
       and(
         gte(debts.createdAt, dayjs().startOf("month").toDate()),
-        eq(contacts.userId, session.user!.id!),
+        eq(contacts.userId, session!.id),
       ),
     );
 
@@ -26,7 +25,7 @@ export default async function Page() {
     .innerJoin(debts, eq(contacts.id, debts.contactId))
     .groupBy(contacts.id)
     .orderBy(desc(sum(debts.amount)))
-    .where(eq(contacts.userId, session.user!.id!))
+    .where(eq(contacts.userId, session!.id))
     .limit(1);
 
   const dateTruncated = sql`DATE(${debts.createdAt})`;
@@ -39,7 +38,7 @@ export default async function Page() {
     .from(debts)
     .innerJoin(contacts, eq(debts.contactId, contacts.id))
     .innerJoin(users, eq(contacts.userId, users.id))
-    .where(eq(users.id, session.user!.id!))
+    .where(eq(users.id, session!.id))
     .groupBy(dateTruncated);
 
   return (

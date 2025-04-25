@@ -1,10 +1,9 @@
-import { authConfig } from "@/app/api/auth/[...nextauth]/authConfig";
 import { db } from "@/app/db/db";
 import { contacts, debts, parseStatusEnum, users } from "@/app/db/schema";
 import PrimaryButton from "@/components/ui/primary-button";
+import { getSession } from "@/lib/actions/auth";
 import { and, desc, eq, ilike, or } from "drizzle-orm";
 import { Landmark } from "lucide-react";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
 import DebtFilters from "./debt-filters";
 import DebtTable from "./debt-table";
@@ -17,7 +16,7 @@ export default async function Page({
     status: string | undefined;
   }>;
 }) {
-  const session = await getServerSession(authConfig);
+  const session = await getSession();
   const { name, status } = await searchParams;
 
   const nameFilter = name
@@ -37,7 +36,7 @@ export default async function Page({
     .from(debts)
     .innerJoin(contacts, eq(debts.contactId, contacts.id))
     .innerJoin(users, eq(contacts.userId, users.id))
-    .where(and(eq(users.id, session!.user!.id!), nameFilter, statusFilter))
+    .where(and(eq(users.id, session!.id), nameFilter, statusFilter))
     .orderBy(desc(debts.createdAt));
 
   return (

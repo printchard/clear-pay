@@ -1,13 +1,14 @@
 "use client";
 
 import Navlink from "@/components/ui/navlink";
+import { signOut } from "@/lib/actions/auth";
 import {
   CircleUserRound,
   Landmark,
   LayoutDashboard,
   LogOut,
+  Settings,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -23,7 +24,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
 
-  // @eslint-ignore-next-line
   useEffect(() => {
     if (isMobile) {
       setOpenMobile(false);
@@ -55,7 +55,13 @@ export default function Navbar() {
         ))}
       </SidebarContent>
       <SidebarFooter className="p-7">
-        <Navlink name="Sign Out" icon={<LogOut />} onClick={signOut}></Navlink>
+        <Navlink
+          name="Settings"
+          icon={<Settings />}
+          href="/settings"
+          isActive={pathname === "/settings"}
+        ></Navlink>
+        <Navlink name="Sign Out" icon={<LogOut />} onClick={signOut} />
       </SidebarFooter>
     </Sidebar>
   );

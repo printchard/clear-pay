@@ -23,7 +23,7 @@ export default function Navlink({
     {
       "bg-primary text-white": isActive,
     },
-    className
+    className,
   );
 
   if (href)
