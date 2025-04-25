@@ -28,7 +28,7 @@ export default function SigninForm() {
         <Input type="password" name="password" placeholder="Password" />
         <Button className="hover:cursor-pointer">Submit</Button>
       </form>
-      <ErrorMessage error={errors.email?.at(0)} />
+      <ErrorMessage error={errors.email?.at(0) || errors.password?.at(0)} />
       <div className="text-sm">
         <span>Are you new to the app?</span>
         <Link href="/auth/register">

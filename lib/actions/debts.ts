@@ -13,6 +13,9 @@ const createDebtSchema = z.object({
     message: "Please select a valid status",
   }),
   contactId: z.string().uuid({ message: "Please select a valid contact" }),
+  createdAt: z.coerce
+    .date()
+    .max(new Date(), { message: "Date must not be in the future" }),
 });
 
 export type CreateDebtFormErrors = z.inferFlattenedErrors<
@@ -37,6 +40,9 @@ const updateDebtSchema = z.object({
     message: "Please select a valid status",
   }),
   contactId: z.string().uuid({ message: "Please select a valid contact" }),
+  createdAt: z.coerce.date().max(new Date(), {
+    message: "Date must not be in the future",
+  }),
 });
 
 export type UpdateDebtFormErrors = z.inferFlattenedErrors<

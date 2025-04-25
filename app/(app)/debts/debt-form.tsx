@@ -3,6 +3,7 @@
 import { Contact, Debt } from "@/app/db/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import DatePicker from "@/components/ui/date-picker";
 import ErrorMessage from "@/components/ui/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,15 +40,31 @@ export default function DebtForm({
   );
   const [contactId, setContactId] = useState(debt?.contactId);
   const [status, setStatus] = useState<string>(debt?.status ?? "pending");
+  const [date, setDate] = useState<Date | undefined>(
+    debt?.createdAt ?? new Date(),
+  );
   const router = useRouter();
 
   return (
     <Card className="p-4">
       <form className="flex flex-col gap-y-4" action={formAction}>
-        <Label>Amount</Label>
-        <Input type="number" name="amount" defaultValue={debt?.amount}></Input>
-        <ErrorMessage error={error.amount?.at(0)} />
-        <fieldset className="flex flex-row gap-4">
+        <section className="flex flex-row gap-4">
+          <div className="flex flex-1 flex-col gap-2">
+            <Label>Amount</Label>
+            <Input
+              type="number"
+              name="amount"
+              defaultValue={debt?.amount}
+            ></Input>
+            <ErrorMessage error={error.amount?.at(0)} />
+          </div>
+          <div className="flex flex-1 flex-col gap-2">
+            <Label>Created At</Label>
+            <DatePicker date={date} setDate={setDate} name="createdAt" />
+            <ErrorMessage error={error.createdAt?.at(0)} />
+          </div>
+        </section>
+        <section className="flex flex-row gap-4">
           <div className="flex flex-1 flex-col gap-2">
             <Label>Status</Label>
             <Select
@@ -93,7 +110,7 @@ export default function DebtForm({
             </Select>
             <ErrorMessage error={error.contactId?.at(0)} />
           </div>
-        </fieldset>
+        </section>
         <div className="flex w-full flex-row gap-4">
           <Button
             type="button"
