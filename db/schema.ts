@@ -60,6 +60,11 @@ export function parseStatusEnum(value: string) {
   return undefined;
 }
 
+export const transactionTypeEnum = pgEnum("transaction_type", [
+  "borrowed",
+  "lent",
+]);
+
 export const debts = pgTable("debts", {
   id: uuid().primaryKey().defaultRandom(),
   amount: integer().notNull(),
@@ -67,6 +72,7 @@ export const debts = pgTable("debts", {
   contactId: uuid()
     .references(() => contacts.id, { onDelete: "cascade" })
     .notNull(),
+  transactionType: transactionTypeEnum().notNull(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp()
     .notNull()
