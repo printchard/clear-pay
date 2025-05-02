@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/db";
-import { debts, statusEnum } from "@/db/schema";
+import { debts, statusEnum, transactionTypeEnum } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -16,6 +16,9 @@ const createDebtSchema = z.object({
   createdAt: z.coerce
     .date()
     .max(new Date(), { message: "Date must not be in the future" }),
+  transactionType: z.enum(transactionTypeEnum.enumValues, {
+    message: "Please select a valid transaction type",
+  }),
 });
 
 export type CreateDebtFormErrors = z.inferFlattenedErrors<

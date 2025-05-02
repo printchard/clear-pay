@@ -40,6 +40,9 @@ export default function DebtForm({
   );
   const [contactId, setContactId] = useState(debt?.contactId);
   const [status, setStatus] = useState<string>(debt?.status ?? "pending");
+  const [transactionType, setTrasactionType] = useState<string>(
+    debt?.transactionType ?? "borrowed",
+  );
   const [date, setDate] = useState<Date | undefined>(
     debt?.createdAt ?? new Date(),
   );
@@ -67,12 +70,7 @@ export default function DebtForm({
         <section className="flex flex-row gap-4">
           <div className="flex flex-1 flex-col gap-2">
             <Label>Status</Label>
-            <Select
-              name="status"
-              value={status}
-              onValueChange={setStatus}
-              key={status}
-            >
+            <Select name="status" value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select the status" />
               </SelectTrigger>
@@ -92,7 +90,6 @@ export default function DebtForm({
               name="contactId"
               value={contactId}
               onValueChange={setContactId}
-              key={contactId}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select the contact" />
@@ -109,6 +106,25 @@ export default function DebtForm({
               </SelectContent>
             </Select>
             <ErrorMessage error={error.contactId?.at(0)} />
+          </div>
+          <div className="flex flex-1 flex-col gap-2">
+            <Label>Transaction Type</Label>
+            <Select
+              name="transactionType"
+              value={transactionType}
+              onValueChange={setTrasactionType}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select the transaction type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Transaction Type</SelectLabel>
+                  <SelectItem value="borrowed">Borrowed</SelectItem>
+                  <SelectItem value="lent">Lent</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
         </section>
         <div className="flex w-full flex-row gap-4">

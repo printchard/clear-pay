@@ -65,6 +65,16 @@ export const transactionTypeEnum = pgEnum("transaction_type", [
   "lent",
 ]);
 
+export type TransactionTypeEnum =
+  (typeof transactionTypeEnum.enumValues)[number];
+
+export function parseTransactionTypeEnum(value: string) {
+  if (transactionTypeEnum.enumValues.includes(value as TransactionTypeEnum)) {
+    return value as TransactionTypeEnum;
+  }
+  return undefined;
+}
+
 export const debts = pgTable("debts", {
   id: uuid().primaryKey().defaultRandom(),
   amount: integer().notNull(),

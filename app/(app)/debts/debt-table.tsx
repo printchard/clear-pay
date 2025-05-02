@@ -19,6 +19,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import StatusBadge from "./status-badge";
+import TransactionTypeBadge from "./transaction-type-badge";
 
 export type DebtTableProps = {
   results: {
@@ -48,6 +49,7 @@ export default function DebtTable({ results }: DebtTableProps) {
             <TableHead>Contact</TableHead>
             <TableHead>Amount</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Transaction Type</TableHead>
             <TableHead>Created At</TableHead>
             <TableHead className="w-30"></TableHead>
           </TableRow>
@@ -67,6 +69,11 @@ export default function DebtTable({ results }: DebtTableProps) {
                 <TableCell>{`$ ${debt.amount}`}</TableCell>
                 <TableCell>
                   <StatusBadge status={debt.status!} />
+                </TableCell>
+                <TableCell>
+                  <TransactionTypeBadge
+                    transactionType={debt.transactionType}
+                  />
                 </TableCell>
                 <TableCell>
                   {dayjs(debt.createdAt).format("DD/MM/YYYY")}
